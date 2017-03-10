@@ -1,22 +1,21 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <router-view :db="db"></router-view>
   </div>
 </template>
 
 <script>
+  import dbChrome from './db.js'
+  import dbFake from './db-fake.js'
+
   export default {
     name: 'app',
     mounted: function() {
       console.log('mounted', this.$route.name)
     },
-    /*
-    data () {
-      return {
-        msg: 'Welcome to Your Vue.js App'
-      }
-    },
-    */
+    data: () => ({
+      db: chrome && chrome.storage ? dbChrome : dbFake,
+    }),
   }
 
 </script>

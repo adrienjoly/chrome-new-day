@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './app.vue'
 import PgPlan from './pg-plan.vue'
-import db from './db.js'
 
 Vue.use(VueRouter)
 

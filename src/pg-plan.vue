@@ -32,6 +32,7 @@
   import db from './db.js'
 
   export default {
+    props: [ 'db' ],
     components: {
       draggable,
     },
@@ -39,27 +40,27 @@
       tasks: [],
     }),
     created: function() {
-      db.subscribeToData('tasks', ({ key, value }) => {
+      this.db.subscribeToData('tasks', ({ key, value }) => {
         console.log('subscribeToData', key, value)
         this.tasks = value || []
       })
     },
     destroyed: function() {
-      // TODO: db.unsubscribeToData('tasks')
+      // TODO: this.db.unsubscribeToData('tasks')
     },
     methods: {
       onDragEnd: function(evt) {
         console.log('onDragEnd', evt)
-        db.setData('tasks', this.tasks, () => console.log('saved.'))
+        this.db.setData('tasks', this.tasks, () => console.log('saved.'))
       },
       onDeleteTask: function(evt) {
         const delTaskName = evt.target.parentElement.getAttribute('data-name')
         const tasks = this.tasks.filter((taskName) => taskName !== delTaskName)
-        db.setData('tasks', tasks, () => console.log('removed:', delTaskName))
+        this.db.setData('tasks', tasks, () => console.log('removed:', delTaskName))
       },
       onAddTask: function(evt) {
         const task = evt.target.value
-        db.setData('tasks', this.tasks.concat([ task ]), () => console.log('added:', task))
+        this.db.setData('tasks', this.tasks.concat([ task ]), () => console.log('added:', task))
         evt.target.value = ''
       },
     },

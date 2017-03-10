@@ -1,13 +1,5 @@
-// _____________________________
-// Generic DB helpers
+// Chrome extension's sync storage
 
-/*
-// (used by push/set/update functions, to translate callback results)
-const pushSnapshotTo = (snapshot, callback) => callback({
-  key: snapshot.key,
-  _firebaseSnapshot: snapshot,
-})
-*/
 // calls back once with { key, value }
 const fetchData = (key, callback) =>
   chrome.storage.sync.get(key, (value) => callback({ key, value: value[key] }))
