@@ -1,17 +1,36 @@
 // Fake storage (for local testing)
 
-var db = {
-  //currentTask: {},
-  tasks: [
-    { name: 'task 1', minutes: 60 },
-    { name: 'task 2', minutes: 120 },
-  ],
-}
+var KEYS = [ 'tasks', 'currentTask' ]
 var listeners = []
 
+// clear local storage
+//KEYS.forEach((key) => localStorage.removeItem(key))
+
+// fired when update happened on another tab
+window.addEventListener('storage', function(e) {  
+  console.log('[db-fake] EVENT:', e.key, JSON.parse(e.newValue))
+  listeners.forEach((listener) =>
+    !listener.key || e.key === listener.key && fetchData(e.key, listener.handler))
+});
+
+// necessary to intercept and broadcast local changes
+var originalSetItem = localStorage.setItem; 
+localStorage.setItem = function(key, data){
+  console.log('[db-fake] update:', key, JSON.parse(data))
+  originalSetItem.apply(this, arguments);
+  listeners.forEach((listener) =>
+    !listener.key || key === listener.key && fetchData(key, listener.handler))
+}
+
 // calls back once with { key, value }
-const fetchData = (key, callback) =>
-  callback({ key: key, value: key ? db[key] : db })
+const fetchData = (key, callback) => {
+  const value = key ? JSON.parse(localStorage.getItem(key)) : KEYS.reduce((acc, k) => {
+    console.log('[db-fake:fetchData]', k, localStorage.getItem(k))
+    acc[k] = JSON.parse(localStorage.getItem(k))
+    return acc
+  }, {})
+  callback({ key: key, value })
+}
 
 // calls back reactively with { key, value }
 const subscribeToData = (key, handler) => {
@@ -25,8 +44,8 @@ const unsubscribeToData = (key, handler) => {
 
 // calls back with { key }
 const setData = (key, data, callback) => {
-  db[key] = data
-  listeners.forEach((listener) => key === listener.key && fetchData(key, listener.handler))
+  localStorage.setItem(key, JSON.stringify(data))
+  //listeners.forEach((listener) => key === listener.key && fetchData(key, listener.handler))
   callback({ key })
 }
 
@@ -36,3 +55,5 @@ export default {
   unsubscribeToData,
   setData,
 }
+
+fetchData(null, ({ key, value }) => console.log('[db-fake] init:', value))
