@@ -24,18 +24,34 @@
       '$route': 'fetchData'
     },
     mounted: function() { this.fetchData() },
-    updated: function() { this.fetchData() },
+    updated: function() { this.fetchData(true) },
     methods: {
-      fetchData: function() {
+      fetchData: function(updateCurrentTask) {
         this.taskindex = parseInt(this.$route.params.taskindex)
         this.nextUrl = '/focus/' + (this.taskindex + 1)
         console.log('fetchData', this.taskindex)
-        this.db.fetchData('tasks', ({ key, value }) => {
-          const task = value[this.taskindex]
-          console.log('fetched', task)
-          this.task = value[this.taskindex]
-          if (!value[this.taskindex + 1]) {
+        this.db.fetchData(null, ({ key, value }) => {
+          console.log('fetched', value)
+          const currentTask = value.currentTask
+          const tasks = value.tasks || []
+          this.task = tasks[this.taskindex]
+          if (!tasks[this.taskindex + 1]) {
             this.nextUrl = '/review'
+          }
+          if (updateCurrentTask) {
+            console.log('updating current task...')
+            const now = new Date().getTime()
+            if (currentTask) {
+              const newMillisecs = now - currentTask.lastStart
+              const updatedTasks = tasks.map((task) =>
+                task.name !== currentTask.name ? task : Object.assign({}, task, {
+                  elapsedMillisecs: (task.elapsedMillisecs || 0) + newMillisecs,
+                }))
+              this.db.setData('tasks', updatedTasks, () => console.log('saved tasks'))
+            }
+            const newTask = Object.assign({}, this.task, { lastStart: now })
+            this.db.setData('currentTask', newTask, () =>
+              console.log('saved currentTask', newTask))
           }
         })
       },
