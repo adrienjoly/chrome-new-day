@@ -10,7 +10,6 @@
 
   export default {
     name: 'app',
-    created: () => console.log('created'),
     mounted: function() {
       console.log('mounted', this.$route.name)
     },

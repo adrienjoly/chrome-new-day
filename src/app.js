@@ -6,7 +6,6 @@ import PgPlan from './pg-plan.vue'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-  //mode: 'history', // does not work on chrome new tab
   routes: [
     { path: '/', name: 'plan', component: PgPlan },
   ]
