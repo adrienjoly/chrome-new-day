@@ -24,7 +24,7 @@
       '$route': 'fetchData'
     },
     mounted: function() { this.fetchData() },
-    updated: function() { this.fetchData(true) },
+    //updated: function() { this.fetchData(true) },
     methods: {
       fetchData: function(updateCurrentTask) {
         this.taskindex = parseInt(this.$route.params.taskindex)
@@ -39,6 +39,7 @@
             this.nextUrl = '/review'
           }
           if (updateCurrentTask) {
+            // TODO: do this whenever user is accessing any page
             console.log('updating current task...')
             const now = new Date().getTime()
             if (currentTask) {
