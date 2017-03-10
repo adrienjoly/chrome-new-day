@@ -20,6 +20,7 @@
       @close="modalDuration = false"
     ></duration-picker>
     <h1>Plan your day</h1>
+    <p>Tasks: (you can drag &amp; drop)</p>
     <ol>
       <draggable v-model="tasks" @end="onDragEnd">
         <li v-for="task, i in tasks" :key="task" :data-index="i" :data-name="task">
@@ -28,7 +29,9 @@
         </li>
       </draggable>
     </ol>
-    <input ref="input" @change="onAddTask">
+    <p>
+      add: <input ref="input" @change="onAddTask" placeholder="enter a new task">
+    </p>
     <router-link to="/focus/0">I'm ready to work!</router-link>
   </div>
 </template>
