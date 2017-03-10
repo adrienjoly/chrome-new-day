@@ -39,7 +39,10 @@
       tasks: [],
     }),
     created: function() {
-      db.subscribeToData('tasks', ({ key, value }) => { this.tasks = value })
+      db.subscribeToData('tasks', ({ key, value }) => {
+        console.log('subscribeToData', key, value)
+        this.tasks = value || []
+      })
     },
     destroyed: function() {
       // TODO: db.unsubscribeToData('tasks')
