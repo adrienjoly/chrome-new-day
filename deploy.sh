@@ -10,9 +10,9 @@ source .env
 VERSION=$(jq --raw-output .version manifest.json)
 echo "Packing v$VERSION ..."
 
-FILEPATH="./NextStep-v$VERSION.zip"
+FILEPATH="./v$VERSION.zip"
 rm $FILEPATH &>/dev/null
-zip $FILEPATH * --no-dir-entries --exclude *.sh *.zip
+zip $FILEPATH ./dist/* --no-dir-entries --exclude *.sh *.zip
 echo "=> Built package for Chrome Web Store, to: $FILEPATH"
 
 echo ""
