@@ -7,12 +7,12 @@
 # (see https://developer.chrome.com/webstore/using_webstore_api)
 source .env
 
-VERSION=$(jq --raw-output .version manifest.json)
+VERSION=$(jq --raw-output .version ./dist/manifest.json)
 echo "Packing v$VERSION ..."
 
 FILEPATH="./v$VERSION.zip"
 rm $FILEPATH &>/dev/null
-zip $FILEPATH ./dist/* --no-dir-entries --exclude *.sh *.zip
+zip $FILEPATH ./dist/* --no-dir-entries --exclude *.sh *.zip *.map
 echo "=> Built package for Chrome Web Store, to: $FILEPATH"
 
 echo ""
