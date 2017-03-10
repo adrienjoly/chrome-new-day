@@ -3,6 +3,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
+    "deploy": "npm run build && ./deploy.sh",
     "start": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
