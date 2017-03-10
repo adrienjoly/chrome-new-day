@@ -31,11 +31,11 @@ chrome.storage.sync.get(null, function(items){
 })
 */
 
-db.subscribeToData('tasks', ({ key, value }) => console.log('onchange:', key, value))
-
+/*
 db.fetchData('tasks', ({ key, value }) => {
   console.log('fetch:', key, value)
   const newTask = 'task ' + new Date().getTime()
   const tasks = (value || []).concat([ newTask ])
   db.setData('tasks', tasks, () => console.log('added:', newTask))
 })
+*/

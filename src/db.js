@@ -13,7 +13,7 @@ const fetchData = (key, callback) =>
   chrome.storage.sync.get(key, (value) => callback({ key, value: value[key] }))
 
 // calls back reactively with { key, value }
-const subscribeToData = (key, callback) =>
+const subscribeToData = (key, callback) => {
   chrome.storage.onChanged.addListener(function(changes, namespace) {
     /*
     Object.keys(changes).reduce((acc, key) => {
@@ -23,8 +23,10 @@ const subscribeToData = (key, callback) =>
     */
     callback({ key, value: changes[key].newValue })
   })
+  fetchData(key, callback)
+}
 
-const unsubscribeToData = (key, callback) => callback() // NOT IMPLEMENTED
+const unsubscribeToData = (key, callback) => {} // NOT IMPLEMENTED
 
 // calls back with { key }
 const setData = (key, data, callback) => {

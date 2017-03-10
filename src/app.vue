@@ -1,13 +1,10 @@
 <template>
   <div id="app">
-    Welcome
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-  console.log('loading app.vue')
-
   export default {
     name: 'app',
     mounted: function() {
