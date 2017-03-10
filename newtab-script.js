@@ -1,8 +1,9 @@
 console.log('newtab-script')
 chrome.storage.sync.get(null, function(items){
-  console.log('got:', items && items.last) // e.g. [ { "yourBody": "myBody" } ]
-  const now = new Date()
-  chrome.storage.sync.set({ 'last': now.toString() }, function(){
-    console.log('saved:', now)
+  console.log('got:', items && items.tasks) // e.g. [ { "yourBody": "myBody" } ]
+  const newTask = 'task ' + new Date().getTime()
+  const tasks = (items.tasks || []).concat([ newTask ])
+  chrome.storage.sync.set({ 'tasks': tasks }, function(){
+    console.log('added:', newTask)
   })
 })
