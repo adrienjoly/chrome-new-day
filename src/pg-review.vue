@@ -4,7 +4,7 @@
 <template>
   <div class="pg-review">
     <h1>Review</h1>
-    <router-link to="plan">Plan tomorrow's tasks</router-link>
+    <router-link to="/">Plan tomorrow's tasks</router-link>
   </div>
 </template>
 

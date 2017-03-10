@@ -1,6 +1,9 @@
 // Fake storage (for local testing)
 
-var tasks = [ 'task 1', 'task 2' ]
+var tasks = [
+  { name: 'task 1', minutes: 60 },
+  { name: 'task 2', minutes: 120 },
+]
 var listeners = []
 
 // calls back once with { key, value }

@@ -4,7 +4,7 @@
 <template>
   <div class="pg-focus">
     <h1>Focus #{{ taskindex }}</h1>
-    <h2>{{ task }}</h2>
+    <h2>{{ task.name }}</h2>
     <router-link :to="nextUrl">Done with this task!</router-link>
   </div>
 </template>
@@ -15,7 +15,7 @@
     data: function() {
       return {
         taskindex: null,
-        task: '',
+        task: {},
         nextUrl: '',
       }
     },

@@ -14,29 +14,37 @@
 
 <template>
   <div class="pg-plan">
+    <duration-picker
+      v-if="modalDuration"
+      @pick="pickDuration"
+      @close="modalDuration = false"
+    ></duration-picker>
     <h1>Plan your day</h1>
-    <ul>
+    <ol>
       <draggable v-model="tasks" @end="onDragEnd">
-        <li v-for="task in tasks" :key="task" :data-name="task">
-          {{ task }}
+        <li v-for="task, i in tasks" :key="task" :data-index="i" :data-name="task">
+          {{ task.name }} ({{ task.minutes }} mn)
           <span class="task-delete" @click="onDeleteTask"> [delete]</span>
         </li>
       </draggable>
-    </ul>
-    <input @change="onAddTask">
+    </ol>
+    <input ref="input" @change="onAddTask">
     <router-link to="/focus/0">I'm ready to work!</router-link>
   </div>
 </template>
 
 <script>
   import draggable from 'vuedraggable'
+  import durationPicker from './ui-duration-picker.vue'
 
   export default {
     props: [ 'db' ],
     components: {
       draggable,
+      durationPicker,
     },
     data: () => ({
+      modalDuration: false,
       tasks: [],
     }),
     created: function() {
@@ -54,14 +62,23 @@
         this.db.setData('tasks', this.tasks, () => console.log('saved.'))
       },
       onDeleteTask: function(evt) {
-        const delTaskName = evt.target.parentElement.getAttribute('data-name')
-        const tasks = this.tasks.filter((taskName) => taskName !== delTaskName)
-        this.db.setData('tasks', tasks, () => console.log('removed:', delTaskName))
+        const delTaskIndex = evt.target.parentElement.getAttribute('data-index')
+        const tasks = this.tasks.slice().filter((taskName, i) => i != delTaskIndex)
+        this.db.setData('tasks', tasks, () => console.log('removed:', delTaskIndex))
       },
       onAddTask: function(evt) {
-        const task = evt.target.value
-        this.db.setData('tasks', this.tasks.concat([ task ]), () => console.log('added:', task))
-        evt.target.value = ''
+        this.modalDuration = true // => pickDuration() will be called
+      },
+      pickDuration: function(minutes) {
+        console.log('setDuration', minutes)
+        const task = {
+          name: this.$refs.input.value,
+          minutes: minutes,
+        }
+        this.db.setData('tasks', this.tasks.concat([ task ]), () =>
+          console.log('added:', task))
+        this.$refs.input.value = ''
+        this.modalDuration = false
       },
     },
   }
