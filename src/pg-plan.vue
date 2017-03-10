@@ -24,12 +24,12 @@
       </draggable>
     </ul>
     <input @change="onAddTask">
+    <router-link to="/focus/0">I'm ready to work!</router-link>
   </div>
 </template>
 
 <script>
   import draggable from 'vuedraggable'
-  import db from './db.js'
 
   export default {
     props: [ 'db' ],
