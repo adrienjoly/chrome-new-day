@@ -2,7 +2,7 @@
 
 // calls back once with { key, value }
 const fetchData = (key, callback) =>
-  chrome.storage.sync.get(key, (value) => callback({ key, value: value[key] }))
+  chrome.storage.sync.get(key, (value) => callback({ key, value: key ? value[key] : value }))
 
 // calls back reactively with { key, value }
 const subscribeToData = (key, callback) => {
@@ -13,7 +13,9 @@ const subscribeToData = (key, callback) => {
       return acc
     }, {})
     */
-    callback({ key, value: changes[key].newValue })
+    if (changes[key]) {
+      callback({ key, value: changes[key].newValue })
+    }
   })
   fetchData(key, callback)
 }
@@ -22,9 +24,15 @@ const unsubscribeToData = (key, callback) => {} // NOT IMPLEMENTED
 
 // calls back with { key }
 const setData = (key, data, callback) => {
-  const change = {}
-  change[key] = data
-  chrome.storage.sync.set(change, () => callback({ key }))
+  fetchData(key, ({ value }) => {
+    if (JSON.stringify(value) !== JSON.stringify(data)) {
+      const change = {}
+      change[key] = data
+      chrome.storage.sync.set(change, () => callback({ key }))
+    } else {
+      callback({ key })
+    }
+  })
 }
 
 export default {
