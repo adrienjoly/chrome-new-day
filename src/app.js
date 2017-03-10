@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import App from './app.vue'
 import PgPlan from './pg-plan.vue'
 import PgFocus from './pg-focus.vue'
+import PgReview from './pg-review.vue'
 
 Vue.use(VueRouter)
 
@@ -10,6 +11,7 @@ const router = new VueRouter({
   routes: [
     { path: '/', name: 'plan', component: PgPlan },
     { path: '/focus/:taskindex', name: 'focus', component: PgFocus },
+    { path: '/review', name: 'review', component: PgReview },
   ]
 })
 
