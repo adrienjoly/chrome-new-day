@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './app.vue'
 import PgPlan from './pg-plan.vue'
+import db from './db.js'
 
 Vue.use(VueRouter)
 
@@ -26,11 +27,15 @@ console.log('newtab-script')
 
 /*
 chrome.storage.sync.get(null, function(items){
-  console.log('got:', items && items.tasks) // e.g. [ { "yourBody": "myBody" } ]
-  const newTask = 'task ' + new Date().getTime()
-  const tasks = (items.tasks || []).concat([ newTask ])
-  chrome.storage.sync.set({ 'tasks': tasks }, function(){
-    console.log('added:', newTask)
-  })
+  console.log('got:', items) // e.g. [ { "yourBody": "myBody" } ]
 })
 */
+
+db.subscribeToData('tasks', ({ key, value }) => console.log('onchange:', key, value))
+
+db.fetchData('tasks', ({ key, value }) => {
+  console.log('fetch:', key, value)
+  const newTask = 'task ' + new Date().getTime()
+  const tasks = (value || []).concat([ newTask ])
+  db.setData('tasks', tasks, () => console.log('added:', newTask))
+})
