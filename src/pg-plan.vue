@@ -65,6 +65,7 @@
           const index = value.tasks.findIndex((t) => t.name === value.currentTask.name)
           this.$router.push('/focus/' + index)
         }
+        // TODO: redirect to /review if all tasks of the day are done
       })
     },
     methods: {
