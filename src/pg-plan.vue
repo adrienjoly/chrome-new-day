@@ -113,6 +113,8 @@
 </template>
 
 <script>
+  // TODO: (styling) improve integration of drag&drop
+  
   import draggable from 'vuedraggable'
   import durationPicker from './ui-duration-picker.vue'
 
