@@ -1,3 +1,5 @@
+== 0.1.0 Integrated UI design on plan and focus pages
+
 == 0.0.3 Gets back to current focus
  * And displays time comparisons on review screen
 

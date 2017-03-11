@@ -21,6 +21,13 @@
     text-align: center;
     align-items: center;
   }
+  .button {
+    background-color: orange;
+    padding: 10px 40px;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+  }
 </style>
 
 <template>

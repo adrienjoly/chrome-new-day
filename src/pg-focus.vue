@@ -2,19 +2,12 @@
   .pg-focus h1 {
     font-size: 64px;
   }
-  .pg-focus a.btn-next {
-    background-color: orange;
-    padding: 10px 40px;
-    color: white;
-    text-decoration: none;
-    cursor: pointer;
-  }
 </style>
 
 <template>
   <div class="pg-focus centered">
     <h1>{{ task.name }}</h1>
-    <router-link class="btn-next" :to="nextUrl">It's done</router-link>
+    <router-link class="button btn-next" :to="nextUrl">It's done</router-link>
   </div>
 </template>
 
