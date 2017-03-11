@@ -1,3 +1,28 @@
+<style>
+  * {
+    font-family: sans-serif;
+  }
+  html {
+    height: 100%;
+  }
+  body {
+    position: relative;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  .centered {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+  }
+</style>
+
 <template>
   <div id="app">
     <!--

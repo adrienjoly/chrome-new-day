@@ -1,30 +1,8 @@
 <style>
-  * {
-    font-family: sans-serif;
-  }
-  html {
-    height: 100%;
-  }
-  body {
-    position: relative;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-  }
-  .pg-focus {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    text-align: center;
-    align-items: center;
-  }
-  h1 {
+  .pg-focus h1 {
     font-size: 64px;
   }
-  a {
+  .pg-focus a.btn-next {
     background-color: orange;
     padding: 10px 40px;
     color: white;
@@ -34,13 +12,17 @@
 </style>
 
 <template>
-  <div class="pg-focus">
+  <div class="pg-focus centered">
     <h1>{{ task.name }}</h1>
-    <router-link :to="nextUrl">It's done</router-link>
+    <router-link class="btn-next" :to="nextUrl">It's done</router-link>
   </div>
 </template>
 
 <script>
+  // TODO: polish
+  // TODO: integrate task progress on top
+  // TODO: integrate link to next task on bottom
+  // TODO: integrate "Snooze" button on top-right corner
   export default {
     props: [ 'db', 'setCurrentTask' ],
     data: () => ({
