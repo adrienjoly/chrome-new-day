@@ -1,11 +1,42 @@
 <style>
+  * {
+    font-family: sans-serif;
+  }
+  html {
+    height: 100%;
+  }
+  body {
+    position: relative;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  .pg-focus {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+  }
+  h1 {
+    font-size: 64px;
+  }
+  a {
+    background-color: orange;
+    padding: 10px 40px;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+  }
 </style>
 
 <template>
   <div class="pg-focus">
-    <h1>Focus #{{ taskindex }}</h1>
-    <h2>{{ task.name }}</h2>
-    <router-link :to="nextUrl">Done with this task!</router-link>
+    <h1>{{ task.name }}</h1>
+    <router-link :to="nextUrl">It's done</router-link>
   </div>
 </template>
 
