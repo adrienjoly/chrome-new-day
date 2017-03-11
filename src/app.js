@@ -18,20 +18,11 @@ const router = new VueRouter({
 })
 
 function init() {
-  console.log('vue', document.getElementById('app'))
   new Vue({
     el: '#app',
     router,
-    render: h => h(App)
+    render: h => h(App) // render webpack-compiled template
   })
 }
 
 document.addEventListener('DOMContentLoaded', init, false);
-
-console.log('newtab-script')
-
-/*
-chrome.storage.sync.get(null, function(items){
-  console.log('got:', items) // e.g. [ { "yourBody": "myBody" } ]
-})
-*/

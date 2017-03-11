@@ -29,9 +29,9 @@
       fetchData: function(updateCurrentTask) {
         this.taskindex = parseInt(this.$route.params.taskindex)
         this.nextUrl = '/focus/' + (this.taskindex + 1)
-        console.log('fetchData', this.taskindex)
+        //console.log('fetchData', this.taskindex)
         this.db.fetchData(null, ({ key, value }) => {
-          console.log('fetched', value)
+          //console.log('fetched', value)
           const currentTask = value.currentTask
           const tasks = value.tasks || []
           this.task = tasks[this.taskindex]

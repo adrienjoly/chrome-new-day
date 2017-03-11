@@ -8,7 +8,7 @@ var listeners = []
 
 // fired when update happened on another tab
 window.addEventListener('storage', function(e) {  
-  console.log('[db-fake] EVENT:', e.key, JSON.parse(e.newValue))
+  //console.log('[db-fake] EVENT:', e.key, JSON.parse(e.newValue))
   listeners.forEach((listener) =>
     !listener.key || e.key === listener.key && fetchData(e.key, listener.handler))
 });
@@ -16,7 +16,7 @@ window.addEventListener('storage', function(e) {
 // necessary to intercept and broadcast local changes
 var originalSetItem = localStorage.setItem; 
 localStorage.setItem = function(key, data){
-  console.log('[db-fake] update:', key, JSON.parse(data))
+  //console.log('[db-fake] update:', key, JSON.parse(data))
   originalSetItem.apply(this, arguments);
   listeners.forEach((listener) =>
     !listener.key || key === listener.key && fetchData(key, listener.handler))
@@ -25,7 +25,7 @@ localStorage.setItem = function(key, data){
 // calls back once with { key, value }
 const fetchData = (key, callback) => {
   const value = key ? JSON.parse(localStorage.getItem(key)) : KEYS.reduce((acc, k) => {
-    console.log('[db-fake:fetchData]', k, localStorage.getItem(k))
+    //console.log('[db-fake:fetchData]', k, JSON.parse(localStorage.getItem(k)))
     acc[k] = JSON.parse(localStorage.getItem(k))
     return acc
   }, {})
@@ -56,4 +56,4 @@ export default {
   setData,
 }
 
-fetchData(null, ({ key, value }) => console.log('[db-fake] init:', value))
+fetchData(null, ({ key, value }) => {} /*console.log('[db-fake] init:', value)*/)
