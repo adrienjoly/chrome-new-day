@@ -13,11 +13,12 @@
 </style>
 
 <template>
-  <div class="pg-plan">
+  <div class="pg-plan centered">
     <duration-picker
-      v-if="modalDuration"
+      v-if="askDurationFor"
+      :taskName="askDurationFor"
       @pick="pickDuration"
-      @close="modalDuration = false"
+      @close="askDurationFor = null"
     ></duration-picker>
     <h1>Plan your day</h1>
     <p>Tasks: (you can drag &amp; drop)</p>
@@ -47,7 +48,7 @@
       durationPicker,
     },
     data: () => ({
-      modalDuration: false,
+      askDurationFor: null,
       tasks: [],
     }),
     created() {
@@ -78,7 +79,7 @@
         this.db.setData('tasks', tasks, () => console.log('[plan] removed:', delTaskIndex))
       },
       onAddTask(evt) {
-        this.modalDuration = true // => pickDuration() will be called
+        this.askDurationFor = this.$refs.input.value // => pickDuration() will be called
       },
       pickDuration: function(minutes) {
         const task = {
@@ -88,7 +89,7 @@
         this.db.setData('tasks', this.tasks.concat([ task ]), () =>
           console.log('[plan] added:', task))
         this.$refs.input.value = ''
-        this.modalDuration = false
+        this.askDurationFor = null
       },
     },
   }
