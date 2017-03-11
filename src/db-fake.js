@@ -6,6 +6,10 @@ var listeners = []
 // clear local storage
 //KEYS.forEach((key) => localStorage.removeItem(key))
 
+// print local storage
+//fetchData(null, ({ key, value }) => console.log('[db-fake] stored:', value))
+//[ 'tasks', 'currentTask' ].forEach((k) => console.log(k, localStorage.getItem(k)))
+
 // fired when update happened on another tab
 window.addEventListener('storage', function(e) {  
   //console.log('[db-fake] EVENT:', e.key, JSON.parse(e.newValue))
@@ -55,5 +59,3 @@ export default {
   unsubscribeToData,
   setData,
 }
-
-fetchData(null, ({ key, value }) => {} /*console.log('[db-fake] init:', value)*/)

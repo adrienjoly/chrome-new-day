@@ -11,49 +11,30 @@
 
 <script>
   export default {
-    props: [ 'db' ],
-    data: function() {
-      return {
-        taskindex: null,
-        task: {},
-        nextUrl: '',
-      }
-    },
+    props: [ 'db', 'setCurrentTask' ],
+    data: () => ({
+      taskindex: null,
+      task: {},
+      nextUrl: '',
+    }),
     watch: {
       // call again the method if the route changes
       '$route': 'fetchData'
     },
-    mounted: function() { this.fetchData() },
-    //updated: function() { this.fetchData(true) },
+    mounted() { this.fetchData() },
+    //updated() { this.fetchData(true) },
     methods: {
-      fetchData: function(updateCurrentTask) {
-        this.taskindex = parseInt(this.$route.params.taskindex)
-        this.nextUrl = '/focus/' + (this.taskindex + 1)
-        //console.log('fetchData', this.taskindex)
-        this.db.fetchData(null, ({ key, value }) => {
-          //console.log('fetched', value)
-          const currentTask = value.currentTask
-          const tasks = value.tasks || []
-          this.task = tasks[this.taskindex]
-          if (!tasks[this.taskindex + 1]) {
-            this.nextUrl = '/review'
-          }
-          if (updateCurrentTask) {
-            // TODO: do this whenever user is accessing any page
-            console.log('updating current task...')
-            const now = new Date().getTime()
-            if (currentTask) {
-              const newMillisecs = now - currentTask.lastStart
-              const updatedTasks = tasks.map((task) =>
-                task.name !== currentTask.name ? task : Object.assign({}, task, {
-                  elapsedMillisecs: (task.elapsedMillisecs || 0) + newMillisecs,
-                }))
-              this.db.setData('tasks', updatedTasks, () => console.log('saved tasks'))
-            }
-            const newTask = Object.assign({}, this.task, { lastStart: now })
-            this.db.setData('currentTask', newTask, () =>
-              console.log('saved currentTask', newTask))
-          }
+      fetchData() {
+        this.db.fetchData('tasks', ({ key, value }) => {
+          const tasks = value || []
+          // 1. update view data based on route parameter
+          this.taskindex = parseInt(this.$route.params.taskindex)
+          this.nextUrl = tasks[this.taskindex + 1]
+            ? '/focus/' + (this.taskindex + 1) : '/review'
+          // 2. update current task (based on route parameter)
+          const now = new Date().getTime()
+          this.task = Object.assign({}, tasks[this.taskindex], { lastStart: now })
+          this.setCurrentTask(this.task) // will update timer and persist in db
         })
       },
     }
