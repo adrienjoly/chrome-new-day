@@ -50,36 +50,42 @@
       modalDuration: false,
       tasks: [],
     }),
-    created: function() {
+    created() {
       this.db.subscribeToData('tasks', ({ key, value }) => {
-        console.log('subscribeToData', key, value)
         this.tasks = value || []
       })
     },
-    destroyed: function() {
-      // TODO: this.db.unsubscribeToData('tasks')
+    destroyed() {
+      this.db.unsubscribeToData('tasks')
+    },
+    mounted() {
+      this.db.fetchData(null, ({ key, value }) => {
+        // if user is supposed to be focusing on a task => redirect to focus page
+        if (value && value.currentTask) {
+          const index = value.tasks.findIndex((t) => t.name === value.currentTask.name)
+          this.$router.push('/focus/' + index)
+        }
+      })
     },
     methods: {
-      onDragEnd: function(evt) {
-        console.log('onDragEnd', evt)
-        this.db.setData('tasks', this.tasks, () => console.log('saved.'))
+      onDragEnd(evt) {
+        this.db.setData('tasks', this.tasks, () => console.log('[plan] saved.'))
       },
-      onDeleteTask: function(evt) {
+      onDeleteTask(evt) {
         const delTaskIndex = evt.target.parentElement.getAttribute('data-index')
         const tasks = this.tasks.slice().filter((taskName, i) => i != delTaskIndex)
-        this.db.setData('tasks', tasks, () => console.log('removed:', delTaskIndex))
+        this.db.setData('tasks', tasks, () => console.log('[plan] removed:', delTaskIndex))
       },
-      onAddTask: function(evt) {
+      onAddTask(evt) {
         this.modalDuration = true // => pickDuration() will be called
       },
       pickDuration: function(minutes) {
-        console.log('setDuration', minutes)
         const task = {
           name: this.$refs.input.value,
           minutes: minutes,
         }
         this.db.setData('tasks', this.tasks.concat([ task ]), () =>
-          console.log('added:', task))
+          console.log('[plan] added:', task))
         this.$refs.input.value = ''
         this.modalDuration = false
       },
