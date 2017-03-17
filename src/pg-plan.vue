@@ -113,6 +113,8 @@
 </template>
 
 <script>
+  const HOUR_END_OF_DAY = 21 // hour of the day when review screen is to be shown systematically
+
   // TODO: (styling) improve integration of drag&drop
   
   import draggable from 'vuedraggable'
@@ -137,6 +139,10 @@
       this.db.unsubscribeToData('tasks')
     },
     mounted() {
+      if (new Date().getHours() >= HOUR_END_OF_DAY) {
+        this.$router.push('/review')
+        return
+      }
       this.db.fetchData(null, ({ key, value }) => {
         // if user is supposed to be focusing on a task => redirect to focus page
         if (value && value.currentTask) {
