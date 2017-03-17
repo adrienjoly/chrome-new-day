@@ -49,29 +49,39 @@
     padding: 10px 0;
     font-size: 18px;
   }
-  .plan-tasks .task-duration {
+  .plan-tasks .task-duration,
+  .plan-tasks .task-estimate {
     display: inline-block;
-    width: 80px;
-    text-align: right;
+    width: 50px;
+    text-align: center;
     font-size: 10px;
+    line-height: 30px;
     color: lightgray;
   }
   li .task-delete {
     display: none;
   }
-  li:hover .task-duration {
-    display: none;
+  li:hover .task-duration,
+  li:hover .task-estimate {
+    display: inline-block;
+    background-color: lightgray;
+    color: gray;
+    cursor: pointer;
   }
   li:hover .task-delete {
-    display: inline-block;
-    width: 80px;
-    text-align: right;
+    display: block;
+    position: absolute;
+    top: 6px;
+    right: -30px;
+    width: 30px;
+    text-align: center;
     cursor: pointer;
-    font-size: 10px;
-    color: lightgray;
+    font-size: 20px;
+    line-height: 30px;
+    color: gray;
   }
   li:hover .task-delete:hover {
-    color: red;
+    color: black;
   }
 </style>
 
@@ -87,12 +97,13 @@
     <h2>What do you want to get done?</h2>
     <ol class="plan-tasks">
       <draggable v-model="tasks" @end="onDragEnd">
-        <li v-for="task, i in tasks" :key="task" :data-name="task">
+        <li v-for="task, i in tasks" :key="task" :data-index="i" :data-name="task.name">
           <span class="task-number">{{ i + 1 }}.</span>
           <span class="task">
             <span class="task-name">{{ task.name }}</span>
-            <span class="task-duration">{{ task.minutes }} mn</span>
-            <span class="task-delete" :data-index="i" @click="onDeleteTask">delete</span>
+            <span class="task-duration" v-if="task.minutes" @click="estimateTask">{{ renderMinutes(parseInt(task.minutes)) }}</span>
+            <span class="task-estimate" v-if="!task.minutes" @click="estimateTask">Estimate</span>
+            <span class="task-delete" @click="onDeleteTask">×</span>
           </span>
         </li>
       </draggable>
@@ -124,6 +135,7 @@
     props: [
       'db',
       'goToNextTask',
+      'updateTaskByName',
     ],
     components: {
       draggable,
@@ -158,6 +170,8 @@
       })
     },
     methods: {
+      renderMinutes: (minutes) =>
+        minutes >= 60 ? (minutes / 60) + 'h' : minutes + 'm',
       onStart() {
         this.goToNextTask()
       },
@@ -166,24 +180,29 @@
         this.$refs.input.focus()
       },
       onDeleteTask(evt) {
-        const delTaskIndex = evt.target.getAttribute('data-index')
+        const delTaskIndex = evt.target.closest('[data-index]').getAttribute('data-index')
         const tasks = this.tasks.slice().filter((taskName, i) => i != delTaskIndex)
         this.db.setData('tasks', tasks, () => console.log('[plan] removed:', delTaskIndex))
         this.$refs.input.focus()
       },
       onAddTask(evt) {
-        this.askDurationFor = this.$refs.input.value // => pickDuration() will be called
-      },
-      pickDuration: function(minutes) {
         const task = {
           name: this.$refs.input.value,
-          minutes: minutes,
         }
         this.db.setData('tasks', this.tasks.concat([ task ]), () =>
           console.log('[plan] added:', task))
         this.$refs.input.value = ''
-        this.askDurationFor = null
         this.$refs.input.focus()
+      },
+      estimateTask(evt) {
+        const taskName = evt.target.closest('[data-name]').getAttribute('data-name')
+        console.log('estimating task:', taskName)
+        this.askDurationFor = taskName // => pickDuration() will be called
+      },
+      pickDuration: function(minutes) {
+        const taskName = this.askDurationFor
+        this.updateTaskByName(taskName, { minutes: minutes })
+        this.askDurationFor = null
       },
     },
   }

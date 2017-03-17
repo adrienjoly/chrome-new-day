@@ -37,8 +37,9 @@
         <input type="button" value="30 mn" data-minutes="30" @click="setDuration">
         <input type="button" value="1 hour" data-minutes="60" @click="setDuration">
         <input type="button" value="2 hours" data-minutes="120" @click="setDuration">
+        <input type="button" value="3 hours" data-minutes="180" @click="setDuration">
         <input type="button" value="4 hours" data-minutes="240" @click="setDuration">
-        <input type="button" value="1 day" data-minutes="360" @click="setDuration">
+        <input type="button" value="8 hours" data-minutes="480" @click="setDuration">
       </form>
     </div>
     <div slot="footer"></div>
