@@ -47,7 +47,7 @@
   import dbChrome from './db.js'
   import dbFake from './db-fake.js'
 
-  const db = chrome && chrome.storage ? dbChrome : dbFake
+  const db = window.chrome && window.chrome.storage ? dbChrome : dbFake
 
   export default {
     name: 'app',
