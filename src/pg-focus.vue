@@ -6,6 +6,30 @@
     position: absolute;
     top: 0;
   }
+  
+  /* navigation */
+
+  .prev-task,
+  .next-task {
+    position: absolute;
+    top: 50%;
+    cursor: pointer;
+    text-decoration: none;
+    background-color: gray;
+    color: white;
+    border-radius: 20px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+  }
+
+  .prev-task {
+    left: 10px;
+  }
+
+  .next-task {
+    right: 10px;
+  }
 </style>
 
 <template>
@@ -17,6 +41,8 @@
       <h1>{{ task.name }}</h1>
       <button class="button btn-next" @click="onDone">It's done</button>
     </div>
+    <div class="prev-task" @click="skipToPrev">&lt;</div>
+    <div class="next-task" @click="skipToNext">&gt;</div>
   </div>
 </template>
 
@@ -25,7 +51,6 @@
 
   // TODO: polish
   // TODO: integrate task progress on top
-  // TODO: integrate link to next task on bottom
   // TODO: integrate "Snooze" button on top-right corner
   export default {
     components: {
@@ -48,6 +73,22 @@
     mounted() { this.fetchData() },
     //updated() { this.fetchData(true) },
     methods: {
+      skipToNext() {
+        this.db.fetchData('tasks', ({ key, value }) => {
+          const tasks = value || []
+          const index = (this.taskindex + 1) % tasks.length
+          console.log('skipToNext', index)
+          this.$router.push('/focus/' + index)
+        })
+      },
+      skipToPrev() {
+        this.db.fetchData('tasks', ({ key, value }) => {
+          const tasks = value || []
+          const index = (tasks.length + this.taskindex - 1) % tasks.length
+          console.log('skipToPrev', index)
+          this.$router.push('/focus/' + index)
+        })
+      },
       fetchData() {
         this.db.fetchData('tasks', ({ key, value }) => {
           const tasks = value || []
