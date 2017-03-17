@@ -149,11 +149,13 @@
     methods: {
       onDragEnd(evt) {
         this.db.setData('tasks', this.tasks, () => console.log('[plan] saved.'))
+        this.$refs.input.focus()
       },
       onDeleteTask(evt) {
         const delTaskIndex = evt.target.getAttribute('data-index')
         const tasks = this.tasks.slice().filter((taskName, i) => i != delTaskIndex)
         this.db.setData('tasks', tasks, () => console.log('[plan] removed:', delTaskIndex))
+        this.$refs.input.focus()
       },
       onAddTask(evt) {
         this.askDurationFor = this.$refs.input.value // => pickDuration() will be called
@@ -167,6 +169,7 @@
           console.log('[plan] added:', task))
         this.$refs.input.value = ''
         this.askDurationFor = null
+        this.$refs.input.focus()
       },
     },
   }
