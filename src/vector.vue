@@ -1,14 +1,14 @@
 <style>
   .vector-container {
-  	height: 100%;
-  	width: 100%;
-  	display: inline-block;
+    height: 100%;
+    width: 100%;
+    display: inline-block;
   }
 </style>
 
 <template>
-	<div class="vector-container" v-once v-html="src">
-	</div>
+  <div class="vector-container" v-once v-html="src">
+  </div>
 </template>
 
 <script>
