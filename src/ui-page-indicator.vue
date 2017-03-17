@@ -1,12 +1,12 @@
 <style>
   .page-indicator {
-    display: flex;
-    flex-direction: row;
     align-items: center;
     height: 32px;
   }
 
   .page-indicator .item {
+    display: inline-block;
+    vertical-align: middle;
     box-sizing: border-box;
     margin: 0px 6px;
     
