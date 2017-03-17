@@ -1,6 +1,6 @@
 // Fake storage (for local testing)
 
-var KEYS = [ 'tasks', 'currentTask' ]
+var KEYS = [ 'tasks', 'currentTask', 'mood' ]
 var listeners = []
 
 // clear local storage
@@ -8,7 +8,7 @@ var listeners = []
 
 // print local storage
 //fetchData(null, ({ key, value }) => console.log('[db-fake] stored:', value))
-//[ 'tasks', 'currentTask' ].forEach((k) => console.log(k, localStorage.getItem(k)))
+//[ 'tasks', 'currentTask', 'mood' ].forEach((k) => console.log(k, localStorage.getItem(k)))
 
 // fired when update happened on another tab
 window.addEventListener('storage', function(e) {  

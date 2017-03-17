@@ -69,7 +69,9 @@
     methods: {
       pickMood: function(mood) {
         console.log("mood> " + mood);
-        this.$router.push('review');
+        this.db.setData('mood', mood, () => {
+          this.$router.push('/review');
+        })
       }
     }
   }

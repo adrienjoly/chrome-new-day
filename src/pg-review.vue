@@ -13,7 +13,7 @@
       </li>
     </ol>
 
-    <router-link to="/">Plan tomorrow's tasks</router-link>
+    <button class="button" @click="endOfDay">Plan tomorrow's tasks</button>
   </div>
 </template>
 
@@ -24,6 +24,12 @@
       tasks: [],
     }),
     methods: {
+      endOfDay() {
+        console.log('end of day')
+        this.db.setData('mood', null, () => {
+          this.$router.push('/')
+        })
+      },
       renderElapsed(task) {
         var seconds = parseInt((task.elapsedMillisecs || 0) / 1000)
         const minutes = parseInt(seconds / 60)
@@ -41,6 +47,11 @@
     },
     mounted() {
       this.setCurrentTask() // will update timer and clear currentTask
+      this.db.fetchData('mood', ({ key, value }) => {
+        if (value === null) {
+          this.$router.push('/mood')
+        }
+      })
     },
   }
 </script>

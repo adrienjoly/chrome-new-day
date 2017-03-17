@@ -22,6 +22,7 @@
     align-items: center;
   }
   .button {
+    border: 0 none;
     background-color: orange;
     padding: 10px 40px;
     color: white;
