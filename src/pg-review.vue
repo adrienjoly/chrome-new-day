@@ -18,6 +18,8 @@
 </template>
 
 <script>
+  import PageIndicator from './PageIndicator.vue';
+
   export default {
     props: [ 'db', 'setCurrentTask' ],
     data: () => ({
@@ -42,5 +44,8 @@
     mounted() {
       this.setCurrentTask() // will update timer and clear currentTask
     },
+    components: {
+      'page-indicator': PageIndicator
+    }
   }
 </script>
