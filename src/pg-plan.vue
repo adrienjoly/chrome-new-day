@@ -209,9 +209,8 @@
       },
       pickDuration: function(minutes) {
         const taskName = this.askDurationFor
-        this.updateTaskByName(taskName, { minutes: minutes })
+        this.updateTaskByName(taskName, { minutes: minutes }, this.afterDurationFct)
         this.askDurationFor = null
-        this.afterDurationFct && this.afterDurationFct()
       },
     },
   }
