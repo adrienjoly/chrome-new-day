@@ -48,7 +48,7 @@
     mounted() {
       this.setCurrentTask() // will update timer and clear currentTask
       this.db.fetchData('mood', ({ key, value }) => {
-        if (value === null) {
+        if (value === null || value === undefined) {
           this.$router.push('/mood')
         }
       })
