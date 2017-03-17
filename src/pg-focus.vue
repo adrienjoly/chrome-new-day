@@ -15,7 +15,7 @@
     </div>
     <div class="centered">
       <h1>{{ task.name }}</h1>
-      <router-link class="button btn-next" :to="nextUrl">It's done</router-link>
+      <button class="button btn-next" @click="onDone">It's done</button>
     </div>
   </div>
 </template>
@@ -31,11 +31,15 @@
     components: {
       'notif-review': NotifReview,
     },
-    props: [ 'db', 'setCurrentTask' ],
+    props: [
+      'db',
+      'setCurrentTask',
+      'goToNextTask',
+      'updateTaskByName',
+    ],
     data: () => ({
       taskindex: null,
       task: {},
-      nextUrl: '',
     }),
     watch: {
       // call again the method if the route changes
@@ -49,14 +53,21 @@
           const tasks = value || []
           // 1. update view data based on route parameter
           this.taskindex = parseInt(this.$route.params.taskindex)
-          this.nextUrl = tasks[this.taskindex + 1]
-            ? '/focus/' + (this.taskindex + 1) : '/review'
           // 2. update current task (based on route parameter)
           const now = new Date().getTime()
           this.task = Object.assign({}, tasks[this.taskindex], { lastStart: now })
           this.setCurrentTask(this.task) // will update timer and persist in db
         })
       },
+      onDone() {
+        console.log('onDone')
+        // 1.set current task as done
+        this.updateTaskByName(this.task.name, { done: true }, () => {
+          console.log('=> goToNextTask')
+          // 2. go to next task to be done (or review page)
+          this.goToNextTask()
+        })
+      }
     }
   }
 </script>

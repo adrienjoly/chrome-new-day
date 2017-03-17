@@ -39,6 +39,8 @@
     <router-view
       :db="db"
       :setCurrentTask="setCurrentTask"
+      :updateTaskByName="updateTaskByName"
+      :goToNextTask="goToNextTask"
     ></router-view>
   </div>
 </template>
@@ -55,7 +57,16 @@
       db: db,
     }),
     methods: {
-      setCurrentTask(task) {
+      updateTaskByName(taskName, update, callback) {
+        this.db.fetchData('tasks', ({ key, value }) => {
+          const tasks = value || []
+          const updatedTasks = tasks.map((task) =>
+            task.name !== taskName ? task : Object.assign({}, task, typeof update === 'function' ? update(task) : update))
+          this.db.setData('tasks', updatedTasks, callback || (() =>
+            console.log('[app] updated elapsed time of previous task')))
+        })
+      },
+      setCurrentTask(task, callback) {
         const taskName = (task || {}).name
         console.log('[app] set current task:', taskName)
         this.db.fetchData(null, ({ key, value }) => {
@@ -67,15 +78,26 @@
             const now = new Date().getTime()
             if (currentTask) {
               const newMillisecs = now - currentTask.lastStart
-              const updatedTasks = tasks.map((task) =>
-                task.name !== currentTask.name ? task : Object.assign({}, task, {
-                  elapsedMillisecs: (task.elapsedMillisecs || 0) + newMillisecs,
-                }))
-              this.db.setData('tasks', updatedTasks, () =>
-                console.log('[app] updated elapsed time of previous task'))
+              this.updateTaskByName(currentTask.name, (task) => ({
+                elapsedMillisecs: (task.elapsedMillisecs || 0) + newMillisecs,
+              }), callback)
             }
-            this.db.setData('currentTask', task || null, () =>
-              console.log('[app] updated currentTask'))
+            this.db.setData('currentTask', task || null, callback && !currentTask ? callback : (() =>
+              console.log('[app] updated currentTask')))
+          } else if (callback) {
+            callback()
+          }
+        })
+      },
+      goToNextTask() {
+        this.db.fetchData('tasks', ({ key, value }) => {
+          const tasks = value || []
+          const nextIndex = tasks.findIndex((task) => !task.done)
+          console.log('goToNextTask:', nextIndex, tasks)
+          if (nextIndex !== -1) {
+            this.$router.push('/focus/' + nextIndex)
+          } else {
+            this.$router.push('/review')
           }
         })
       },

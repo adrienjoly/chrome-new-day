@@ -108,7 +108,7 @@
         </span>
       </li>
     </ol>
-    <router-link class="button" to="/focus/0">Start my day</router-link>
+    <button class="button" @click="onStart">Start my day</button>
   </div>
 </template>
 
@@ -121,7 +121,10 @@
   import durationPicker from './ui-duration-picker.vue'
 
   export default {
-    props: [ 'db' ],
+    props: [
+      'db',
+      'goToNextTask',
+    ],
     components: {
       draggable,
       durationPicker,
@@ -147,12 +150,17 @@
         // if user is supposed to be focusing on a task => redirect to focus page
         if (value && value.currentTask) {
           const index = value.tasks.findIndex((t) => t.name === value.currentTask.name)
-          this.$router.push('/focus/' + index)
+          if (index !== -1) {
+            this.$router.push('/focus/' + index)
+          }
         }
         // TODO: redirect to /review if all tasks of the day are done
       })
     },
     methods: {
+      onStart() {
+        this.goToNextTask()
+      },
       onDragEnd(evt) {
         this.db.setData('tasks', this.tasks, () => console.log('[plan] saved.'))
         this.$refs.input.focus()
