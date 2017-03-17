@@ -1,3 +1,11 @@
+== 0.1.2 Improvements
+ * safari support, for dev
+ * lazy task estimation
+ * focus on input after pressing enter
+ * task progress and navigation on focus screen
+ * suggest review after 6pm, and force it after 9pm
+ * ask for mood before review
+
 == 0.1.0 Integrated UI design on plan and focus pages
 
 == 0.0.3 Gets back to current focus
