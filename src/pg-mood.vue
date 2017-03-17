@@ -56,11 +56,11 @@
     props: [ 'db' ],
     data: () => ({
       icons: [
-        require('./svg/icon-mood-0.svg'),
-        require('./svg/icon-mood-1.svg'),
-        require('./svg/icon-mood-2.svg'),
-        require('./svg/icon-mood-3.svg'),
-        require('./svg/icon-mood-4.svg')
+        require('./svg/mood-0.svg'),
+        require('./svg/mood-1.svg'),
+        require('./svg/mood-2.svg'),
+        require('./svg/mood-3.svg'),
+        require('./svg/mood-4.svg')
       ]
     }),
     components: {

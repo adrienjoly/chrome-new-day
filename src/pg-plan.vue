@@ -1,16 +1,17 @@
 <style>
   .pg-plan h1 {
-    font-weight: normal;
+    font-weight: 300;
+    color: #333333;
+    font-size: 32px;
   }
   .pg-plan h2 {
-    font-weight: normal;
-    font-size: 14px;
-    color: gray;
+    font-weight: 400;
+    font-size: 15px;
+    color: rgba(50,50,50, 0.5);
     margin-top: 0;
     margin-bottom: 30px;
   }
   .plan-tasks {
-    border: 1px solid lightgray;
     padding: 30px 50px;
     text-align: left;
     list-style: none;
@@ -26,11 +27,13 @@
     text-align: right;
     width: 20px;
     margin-right: 20px;
-    font-size: 18px;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(50,50,50, 0.5);
   }
   .plan-tasks li .task {
     display: inline-block;
-    border-bottom: 1px solid lightgray;
+    border-bottom: 1px solid #EBEBEB;
   }
   .plan-tasks li .task.task-entry {
     display: inline-block;
@@ -47,7 +50,9 @@
     width: 300px;
     text-overflow: ellipsis;
     padding: 10px 0;
-    font-size: 18px;
+    font-size: 15px;
+    font-weight: 400;
+    color: #333333;
   }
   .plan-tasks .task-duration,
   .plan-tasks .task-estimate {
@@ -93,8 +98,8 @@
       @pick="pickDuration"
       @close="askDurationFor = null"
     ></duration-picker>
-    <h1>Today is a New Day</h1>
-    <h2>What do you want to get done?</h2>
+    <h1>{{ today }}</h1>
+    <h2>Today is a New Day. What's your plan ?</h2>
     <ol class="plan-tasks">
       <draggable v-model="tasks" @end="onDragEnd">
         <li v-for="task, i in tasks" :key="task" :data-index="i" :data-name="task.name">
@@ -119,7 +124,7 @@
         </span>
       </li>
     </ol>
-    <button class="button" @click="onStart">Start my day</button>
+    <button class="button outline" @click="onStart">Start my day</button>
   </div>
 </template>
 
@@ -170,7 +175,19 @@
         // TODO: redirect to /review if all tasks of the day are done
       })
     },
+    computed: {
+      today: function() { return this.formatDate(new Date()); }
+    },
     methods: {
+      formatDate: (date) => {
+        var dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Wednesday"];
+        var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        var dayOfWeek = date.getDay();
+        var dayOfMonth = date.getDate();
+        var monthIndex = date.getMonth();
+
+        return dayNames[dayOfWeek] + ' ' + monthNames[monthIndex] + ' ' + dayOfMonth;
+      },
       renderMinutes: (minutes) =>
         minutes >= 60 ? (minutes / 60) + 'h' : minutes + 'm',
       onStart() {

@@ -9,54 +9,64 @@
   
   /* navigation */
 
-  .prev-task,
-  .next-task {
+  .arrow-container {
     position: absolute;
-    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 0px);
+    bottom: 50px;
+  }
+
+  .arrow {
+    margin: 0px 10px;
+    display: inline-block;
+    width: 64px;
+    height: 64px;
     cursor: pointer;
-    text-decoration: none;
-    background-color: gray;
-    color: white;
-    border-radius: 20px;
-    width: 20px;
-    height: 20px;
-    text-align: center;
   }
 
-  .prev-task {
-    left: 10px;
+  .arrow:hover circle {
+    fill: rgba(175,175,175,0.05);
   }
 
-  .next-task {
-    right: 10px;
+  .arrow:active circle {
+    fill: rgba(100,100,100,0.1);
   }
+
 </style>
 
 <template>
   <div class="pg-focus centered">
     <div class="centered">
       <h1>{{ task.name }}</h1>
-      <button class="button btn-next" @click="onDone">It's done</button>
+      <button class="button secondary btn-next" @click="onDone">It's done</button>
     </div>
     <div class="focus-notifs">
       <notif-review />
       <page-indicator :pages="tasks" @page-changed="goToTask" />
     </div>
-    <div class="prev-task" @click="skipToPrev">&lt;</div>
-    <div class="next-task" @click="skipToNext">&gt;</div>
+    <div class="arrow-container">
+      <div class="arrow" @click.prevent="skipToPrev">
+        <vector :src="leftArrow"/>
+      </div>
+      <div class="arrow" @click.prevent="skipToNext">
+        <vector :src="rightArrow"/>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   import NotifReview from './ui-notif-review.vue'
   import PageIndicator from './ui-page-indicator.vue';
+  import Vector from './ui-vector.vue';
 
   // TODO: polish
   // TODO: integrate "Snooze" button on top-right corner
   export default {
     components: {
       'notif-review': NotifReview,
-      'page-indicator': PageIndicator
+      'page-indicator': PageIndicator,
+      'vector': Vector,
     },
     props: [
       'db',
@@ -68,6 +78,8 @@
       taskindex: null,
       task: {},
       tasks: [],
+      leftArrow: require('./svg/arrow-back.svg'),
+      rightArrow: require('./svg/arrow-forward.svg'),
     }),
     watch: {
       // call again the method if the route changes

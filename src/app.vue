@@ -1,6 +1,6 @@
 <style>
   * {
-    font-family: sans-serif;
+    font-family: 'Roboto', sans-serif;
   }
   html {
     height: 100%;
@@ -12,6 +12,7 @@
     margin: 0;
   }
   .centered {
+    top: 0px;
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -22,12 +23,36 @@
     align-items: center;
   }
   .button {
-    border: 0 none;
-    background-color: orange;
+    box-sizing: border-box;
+    border: none;
     padding: 10px 40px;
     color: white;
     text-decoration: none;
     cursor: pointer;
+    border-radius: 4px;
+    font-weight: medium;
+    font-size: 1.5em;
+    background-color: #F5A623;
+
+    transition: box-shadow 0.2s ease-in-out;
+  }
+
+  .button:active {
+    box-shadow: inset 0px 2px 2px 1px rgba(0,0,0,0.2);
+  }
+
+  .button.outline {
+    background-color: white;
+    border: 2px solid #F5A623;
+    color: #F5A623;
+  }
+
+  .button.outline:active {
+    box-shadow: inset 0px 1px 1px 1px rgba(0,0,0,0.2);
+  }
+
+  .button.secondary {
+    background-color: #32C9B3;
   }
 </style>
 
