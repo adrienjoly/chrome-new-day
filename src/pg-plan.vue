@@ -186,7 +186,7 @@
         var dayOfMonth = date.getDate();
         var monthIndex = date.getMonth();
 
-        return dayNames[dayOfWeek] + ' ' + monthNames[monthIndex] + ' ' + dayOfMonth;
+        return dayNames[dayOfWeek] + ', ' + monthNames[monthIndex] + ' ' + dayOfMonth;
       },
       renderMinutes: (minutes) =>
         minutes >= 60 ? (minutes / 60) + 'h' : minutes + 'm',
