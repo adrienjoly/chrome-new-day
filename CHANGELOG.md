@@ -1,3 +1,10 @@
+== 0.1.4 UI fixes
+ * UI fix: re-styling of focus page
+ * UI fix: comma in date
+ * UI fix: centered indicator
+ * UI fix: remove outline from buttons
+ * UI fix: bottom-border on all pg-plan li's (including input)
+
 == 0.1.3 Bug fixes
  * bug fix: has to estimate time twice
  * bug fix: mood condition not working in extension mode
