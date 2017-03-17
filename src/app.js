@@ -5,6 +5,7 @@ import PgPlan from './pg-plan.vue'
 import PgFocus from './pg-focus.vue'
 import PgReview from './pg-review.vue'
 import PgAdmin from './pg-admin.vue'
+import PgMood from './pg-mood.vue'
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,7 @@ const router = new VueRouter({
     { path: '/focus/:taskindex', name: 'focus', component: PgFocus },
     { path: '/review', name: 'review', component: PgReview },
     { path: '/admin', name: 'admin', component: PgAdmin },
+    { path: '/mood', name: 'mood', component: PgMood },
   ]
 })
 
