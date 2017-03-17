@@ -143,6 +143,7 @@
     },
     data: () => ({
       askDurationFor: null,
+      afterDurationFct: null, // function to call after setting a task's duration
       tasks: [],
     }),
     created() {
@@ -173,7 +174,14 @@
       renderMinutes: (minutes) =>
         minutes >= 60 ? (minutes / 60) + 'h' : minutes + 'm',
       onStart() {
-        this.goToNextTask()
+        const nonEstimatedTasks = this.tasks.filter((task) => !task.minutes)
+        if (nonEstimatedTasks.length) {
+          // estimate next non-estimated task
+          this.askDurationFor = nonEstimatedTasks[0].name // => pickDuration() will be called
+          this.afterDurationFct = this.onStart.bind(this)
+        } else {
+          this.goToNextTask()
+        }
       },
       onDragEnd(evt) {
         this.db.setData('tasks', this.tasks, () => console.log('[plan] saved.'))
@@ -203,6 +211,7 @@
         const taskName = this.askDurationFor
         this.updateTaskByName(taskName, { minutes: minutes })
         this.askDurationFor = null
+        this.afterDurationFct && this.afterDurationFct()
       },
     },
   }
