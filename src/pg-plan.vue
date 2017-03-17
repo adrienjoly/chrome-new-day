@@ -18,6 +18,7 @@
   }
   .plan-tasks li {
     position: relative;
+    border-bottom: 1px solid #EBEBEB;
   }
   .plan-tasks li span {
     vertical-align: middle;
@@ -33,7 +34,6 @@
   }
   .plan-tasks li .task {
     display: inline-block;
-    border-bottom: 1px solid #EBEBEB;
   }
   .plan-tasks li .task.task-entry {
     display: inline-block;
