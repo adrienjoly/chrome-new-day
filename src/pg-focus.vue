@@ -2,21 +2,35 @@
   .pg-focus h1 {
     font-size: 64px;
   }
+  .focus-notifs {
+    position: absolute;
+    top: 0;
+  }
 </style>
 
 <template>
   <div class="pg-focus centered">
-    <h1>{{ task.name }}</h1>
-    <router-link class="button btn-next" :to="nextUrl">It's done</router-link>
+    <div class="focus-notifs">
+      <notif-review />
+    </div>
+    <div class="centered">
+      <h1>{{ task.name }}</h1>
+      <router-link class="button btn-next" :to="nextUrl">It's done</router-link>
+    </div>
   </div>
 </template>
 
 <script>
+  import NotifReview from './ui-notif-review.vue'
+
   // TODO: polish
   // TODO: integrate task progress on top
   // TODO: integrate link to next task on bottom
   // TODO: integrate "Snooze" button on top-right corner
   export default {
+    components: {
+      'notif-review': NotifReview,
+    },
     props: [ 'db', 'setCurrentTask' ],
     data: () => ({
       taskindex: null,
