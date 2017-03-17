@@ -1,3 +1,7 @@
+== 0.1.3 Bug fixes
+ * bug fix: has to estimate time twice
+ * bug fix: mood condition not working in extension mode
+
 == 0.1.2 Improvements
  * safari support, for dev
  * lazy task estimation
