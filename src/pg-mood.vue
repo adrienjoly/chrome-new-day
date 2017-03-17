@@ -50,7 +50,7 @@
 </template>
 
 <script>
-  import Vector from './vector.vue';
+  import Vector from './ui-vector.vue';
 
   export default {
     props: [ 'db' ],

@@ -36,6 +36,7 @@
   <div class="pg-focus centered">
     <div class="focus-notifs">
       <notif-review />
+      <page-indicator :pages="pages" />
     </div>
     <div class="centered">
       <h1>{{ task.name }}</h1>
@@ -48,6 +49,7 @@
 
 <script>
   import NotifReview from './ui-notif-review.vue'
+  import PageIndicator from './ui-page-indicator.vue';
 
   // TODO: polish
   // TODO: integrate task progress on top
@@ -55,6 +57,7 @@
   export default {
     components: {
       'notif-review': NotifReview,
+      'page-indicator': PageIndicator
     },
     props: [
       'db',
@@ -65,6 +68,11 @@
     data: () => ({
       taskindex: null,
       task: {},
+      pages: [
+        { title: "page1", done: true }, 
+        { title: "page2", current: true, done: true }, 
+        { title: "page3", } 
+      ]
     }),
     watch: {
       // call again the method if the route changes
