@@ -33,7 +33,7 @@
     font-weight: medium;
     font-size: 1.5em;
     background-color: #F5A623;
-
+    outline: none;
     transition: box-shadow 0.2s ease-in-out;
   }
 
