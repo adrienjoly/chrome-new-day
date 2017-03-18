@@ -180,7 +180,7 @@
     },
     methods: {
       formatDate: (date) => {
-        var dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Wednesday"];
+        var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         var dayOfWeek = date.getDay();
         var dayOfMonth = date.getDate();

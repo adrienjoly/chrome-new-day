@@ -1,3 +1,5 @@
+ * bug fix: day of the week
+
 == 0.1.4 UI fixes
  * UI fix: re-styling of focus page
  * UI fix: comma in date
