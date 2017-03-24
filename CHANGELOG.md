@@ -1,4 +1,6 @@
- * bug fix: day of the week
+ * feature: "done" notification + undo
+ * bug fix: "undefined" day of the week
+ * bug fix: subscriptions and unsubscriptions (causing bugs when deleting tasks from localhost)
 
 == 0.1.4 UI fixes
  * UI fix: re-styling of focus page
