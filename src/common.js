@@ -23,9 +23,18 @@ const renderMinutesPrecise = (minutes) =>
 const renderSeconds = (seconds) =>
   seconds > 60 ? renderMinutesPrecise(seconds / 60) : parseInt(seconds % 60) + 's'
 
+const sumElapsedSecondsWithoutBreaks = (tasks) =>
+  tasks.reduce((acc, task) => acc + task.elapsedMillisecs / 1000, 0)
+  // TODO: don't take breaks into account
+
+const sumElapsedSecondsWithBreaks = sumElapsedSecondsWithoutBreaks
+  // TODO: take breaks into account
+
 export default {
   uuid,
   formatDate,
   renderMinutes,
   renderSeconds,
+  sumElapsedSecondsWithoutBreaks,
+  sumElapsedSecondsWithBreaks,
 }

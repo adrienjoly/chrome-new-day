@@ -55,6 +55,7 @@
   
   const renderSeconds = common.renderSeconds
   const renderMinutes = common.renderMinutes
+  const sumElapsedSecondsWithoutBreaks = common.sumElapsedSecondsWithoutBreaks
 
   export default {
     props: [
@@ -63,9 +64,8 @@
     computed: {
       // note: in this component, durations are given in seconds
       elapsed() {
-        return 35 * 60;
-        return this.tasks.reduce((acc, task) => acc + task.elapsedMillisecs / 1000, 0)
-        // TODO: don't take breaks into account
+        //return 35 * 60; // for testing
+        return sumElapsedSecondsWithoutBreaks(this.tasks)
       },
       estimated() {
         return this.tasks.reduce((acc, task) => acc + task.minutes * 60, 0)
