@@ -47,7 +47,7 @@
         :current-task="task"
         @cancel="onDoneCancel"
       />
-      <notif-review />
+      <notif-review @gotoreview="onGoToReview" />
       <page-indicator :pages="tasks" @page-changed="goToTask" />
     </div>
     <div class="arrow-container">
@@ -78,6 +78,7 @@
     },
     props: [
       'db',
+      //'tasks', // TODO: add this line, and remove fetchData() calls
       'analytics',
       'setCurrentTask',
       'goToNextTask',
@@ -169,6 +170,11 @@
           console.log('=> goToNextTask')
           // 2. go to next task to be done (or review page)
           this.goToNextTask()
+        })
+      },
+      onGoToReview() {
+        this.db.setData('reasonForReview', this.analytics.review.startReason.MANUALLY, () => {
+          this.$router.push('/review')
         })
       },
     }

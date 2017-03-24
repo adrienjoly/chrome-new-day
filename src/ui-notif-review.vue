@@ -2,9 +2,7 @@
   <div class="notif-review">
     <p v-if="displayReviewLink">
       Are you done for today?
-      <router-link to="review">
-      Let's review!
-      </router-link>
+      <a @click.prevent="$emit('gotoreview')">Let's review!</a>
     </p>
   </div>
 </template>

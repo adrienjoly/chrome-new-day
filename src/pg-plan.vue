@@ -169,7 +169,9 @@
     },
     mounted() {
       if (new Date().getHours() >= HOUR_END_OF_DAY) {
-        this.$router.push('/review')
+        this.db.setData('reasonForReview', this.analytics.review.startReason.OVERTIME, () => {
+          this.$router.push('/review')
+        })
         return
       }
       this.db.fetchData(null, ({ key, value }) => {
@@ -242,7 +244,7 @@
       pickDuration(minutes) {
         const taskName = this.askDurationFor
         const task = this.tasks.find((task) => task.name === taskName)
-        this.updateTaskByName(taskName, { minutes: minutes }, this.afterDurationFct)
+        this.updateTaskByName(taskName, { minutes: parseInt(minutes) }, this.afterDurationFct)
         this.askDurationFor = null
         this.analytics.estimate.estimate(task.uuid, parseInt(minutes) * 60)
       },

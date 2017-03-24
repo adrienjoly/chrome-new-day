@@ -88,17 +88,25 @@
         this.db.fetchData('mood', ({ key, value }) => {
           if (value === null || value === undefined) {
             this.$router.push('/mood')
-            this.analytics.mood.start({
-              reason: this.analytics.review.startReason.FINISHED, // TODO: depending on source ?
-              totalTime: sumElapsedSecondsWithBreaks(this.tasks),
-              breaks: [], // TODO
-              tasks: this.tasks.map((task) => ({
-                id: task.uuid,
-                name: task.name,
-                estimation: task.minutes * 60,
-                done: task.done,
-                timeSpent: task.elapsedMillisecs / 1000,
-              })),
+
+            this.db.fetchData('reasonForReview', ({ key, value }) => {
+              const reasonForReview = value || this.analytics.review.startReason.FINISHED
+
+              this.db.setData('reasonForReview', null, () => {})
+
+              this.analytics.mood.start({
+                reason: reasonForReview,
+                totalTime: sumElapsedSecondsWithBreaks(this.tasks),
+                breaks: [], // TODO
+                tasks: this.tasks.map((task) => ({
+                  id: task.uuid,
+                  name: task.name,
+                  estimation: task.minutes * 60,
+                  done: task.done,
+                  timeSpent: task.elapsedMillisecs / 1000,
+                })),
+              })
+
             })
           }
         })
