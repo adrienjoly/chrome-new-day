@@ -144,6 +144,7 @@
   export default {
     props: [
       'db',
+      'analytics',
       'goToNextTask',
       'updateTaskByName',
     ],
@@ -181,6 +182,7 @@
         } else {
           NotifDone.reset(this.db) // clears the "task done / undo" notification
         }
+        this.analytics.plan.start()
         // TODO: redirect to /review if all tasks of the day are done
       })
     },
@@ -205,28 +207,39 @@
       },
       onDeleteTask(evt) {
         const delTaskIndex = evt.target.closest('[data-index]').getAttribute('data-index')
+        const task = this.tasks[delTaskIndex]
         const tasks = this.tasks.slice().filter((taskName, i) => i != delTaskIndex)
         this.db.setData('tasks', tasks, () => console.log('[plan] removed:', delTaskIndex))
         this.$refs.input.focus()
+        this.analytics.plan.removeTask(task.uuid)
       },
       onAddTask(evt) {
         const task = {
+          uuid: common.uuid(),
           name: this.$refs.input.value,
         }
         this.db.setData('tasks', this.tasks.concat([ task ]), () =>
           console.log('[plan] added:', task))
         this.$refs.input.value = ''
         this.$refs.input.focus()
+        this.analytics.plan.addTask({
+          id: task.uuid,
+          name: task.name,
+          estimation: null, // in seconds
+        })
       },
       estimateTask(evt) {
         const taskName = evt.target.closest('[data-name]').getAttribute('data-name')
         console.log('estimating task:', taskName)
         this.askDurationFor = taskName // => pickDuration() will be called
+        this.analytics.estimate.start()
       },
       pickDuration(minutes) {
         const taskName = this.askDurationFor
+        const task = this.tasks.find((task) => task.name === taskName)
         this.updateTaskByName(taskName, { minutes: minutes }, this.afterDurationFct)
         this.askDurationFor = null
+        this.analytics.estimate.estimate(task.uuid, parseInt(minutes) * 60)
       },
     },
   }

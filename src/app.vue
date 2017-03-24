@@ -64,6 +64,7 @@
     -->
     <router-view
       :db="db"
+      :analytics="analytics"
       :setCurrentTask="setCurrentTask"
       :updateTaskByName="updateTaskByName"
       :goToNextTask="goToNextTask"
@@ -74,6 +75,7 @@
 <script>
   import dbChrome from './db.js'
   import dbFake from './db-fake.js'
+  import Analytics from './analytics'
 
   const db = window.chrome && window.chrome.storage ? dbChrome : dbFake
 
@@ -81,6 +83,7 @@
     name: 'app',
     data: () => ({
       db: db,
+      analytics: Analytics,
     }),
     methods: {
       updateTaskByName(taskName, update, callback) {
