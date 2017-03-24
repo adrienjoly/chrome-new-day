@@ -133,9 +133,13 @@
 
   // TODO: (styling) improve integration of drag&drop
   
+  import common from './common.js'
   import draggable from 'vuedraggable'
   import NotifDone from './ui-notif-done.vue'
   import durationPicker from './ui-duration-picker.vue'
+
+  const formatDate = common.formatDate
+  const renderMinutes = common.renderMinutes
 
   export default {
     props: [
@@ -181,20 +185,10 @@
       })
     },
     computed: {
-      today: function() { return this.formatDate(new Date()); }
+      today: function() { return formatDate(new Date()); }
     },
     methods: {
-      formatDate: (date) => {
-        var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        var dayOfWeek = date.getDay();
-        var dayOfMonth = date.getDate();
-        var monthIndex = date.getMonth();
-
-        return dayNames[dayOfWeek] + ', ' + monthNames[monthIndex] + ' ' + dayOfMonth;
-      },
-      renderMinutes: (minutes) =>
-        minutes >= 60 ? (minutes / 60) + 'h' : minutes + 'm',
+      renderMinutes,
       onStart() {
         const nonEstimatedTasks = this.tasks.filter((task) => !task.minutes)
         if (nonEstimatedTasks.length) {
