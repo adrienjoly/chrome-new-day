@@ -78,6 +78,7 @@
     },
     props: [
       'db',
+      'analytics',
       'setCurrentTask',
       'goToNextTask',
       'updateTaskByName',
@@ -102,6 +103,10 @@
           const index = (this.taskindex + 1) % tasks.length
           console.log('skipToNext', index)
           this.$router.push('/focus/' + index)
+          this.analytics.focus.moveForward({
+            index: index,
+            taskId: tasks[index].uuid,
+          })
         })
       },
       skipToPrev() {
@@ -110,10 +115,24 @@
           const index = (tasks.length + this.taskindex - 1) % tasks.length
           console.log('skipToPrev', index)
           this.$router.push('/focus/' + index)
+          this.analytics.focus.moveBackward({
+            index: index,
+            taskId: tasks[index].uuid,
+          })
         })
       },
       goToTask(taskIndex) {
-        this.$router.push('/focus/' + taskIndex)        
+        this.db.fetchData('tasks', ({ key, value }) => {
+          const tasks = value || []
+          this.analytics.focus.changePage({
+            index: this.taskindex,
+            taskId: tasks[this.taskindex].uuid,
+          }, {
+            index: taskIndex,
+            taskId: tasks[taskIndex].uuid,
+          })
+          this.$router.push('/focus/' + taskIndex)
+        })
       },
       fetchData() {
         this.db.fetchData('tasks', ({ key, value }) => {
@@ -134,6 +153,7 @@
       onDone() {
         console.log('onDone')
         this.$refs.notifDone.notifyDoneTask(this.task)
+        this.analytics.focus.finishTask(this.task.uuid)
         // 1.set current task as done
         this.updateTaskByName(this.task.name, { done: true }, () => {
           console.log('=> goToNextTask')
@@ -143,6 +163,7 @@
       },
       onDoneCancel(task) {
         console.log('cancelling task:', task)
+        this.analytics.focus.undoFinishTask(task.uuid)
         // 1. set previous task as not done
         this.updateTaskByName(task.name, { done: false }, () => {
           console.log('=> goToNextTask')

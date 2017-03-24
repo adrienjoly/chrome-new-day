@@ -199,6 +199,11 @@
           this.afterDurationFct = this.onStart.bind(this)
         } else {
           this.goToNextTask()
+          this.analytics.focus.start(this.tasks.map((task) => ({
+            id: task.uuid,
+            name: task.name,
+            estimation: task.minutes * 60, // in seconds
+          })))
         }
       },
       onDragEnd(evt) {
