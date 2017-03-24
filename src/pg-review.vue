@@ -21,6 +21,9 @@
     <div>
       <h1>{{ today }}</h1>
       <h2>Let's review your workday</h2>
+      <performance-bar
+        :tasks="tasks"
+      />
       <ol>
         <li v-for="task, i in tasks" :key="task">
           {{ task.name }} : 
@@ -35,11 +38,15 @@
 
 <script>
   import common from './common.js'
+  import PerformanceBar from './ui-performance-bar.vue'
   
   const formatDate = common.formatDate
   const renderMinutes = common.renderMinutes
 
   export default {
+    components: {
+      'performance-bar': PerformanceBar,
+    },
     props: [
       'db',
       'setCurrentTask',
