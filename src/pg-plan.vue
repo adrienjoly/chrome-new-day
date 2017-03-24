@@ -134,6 +134,7 @@
   // TODO: (styling) improve integration of drag&drop
   
   import draggable from 'vuedraggable'
+  import NotifDone from './ui-notif-done.vue'
   import durationPicker from './ui-duration-picker.vue'
 
   export default {
@@ -150,14 +151,16 @@
       askDurationFor: null,
       afterDurationFct: null, // function to call after setting a task's duration
       tasks: [],
+      tasksSubscriptionHandler: null,
     }),
     created() {
-      this.db.subscribeToData('tasks', ({ key, value }) => {
+      this.tasksSubscriptionHandler = ({ key, value }) => {
         this.tasks = value || []
-      })
+      }
+      this.db.subscribeToData('tasks', this.tasksSubscriptionHandler)
     },
     destroyed() {
-      this.db.unsubscribeToData('tasks')
+      this.db.unsubscribeToData('tasks', this.tasksSubscriptionHandler)
     },
     mounted() {
       if (new Date().getHours() >= HOUR_END_OF_DAY) {
@@ -171,6 +174,8 @@
           if (index !== -1) {
             this.$router.push('/focus/' + index)
           }
+        } else {
+          NotifDone.reset(this.db) // clears the "task done / undo" notification
         }
         // TODO: redirect to /review if all tasks of the day are done
       })
@@ -224,7 +229,7 @@
         console.log('estimating task:', taskName)
         this.askDurationFor = taskName // => pickDuration() will be called
       },
-      pickDuration: function(minutes) {
+      pickDuration(minutes) {
         const taskName = this.askDurationFor
         this.updateTaskByName(taskName, { minutes: minutes }, this.afterDurationFct)
         this.askDurationFor = null

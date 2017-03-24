@@ -4,6 +4,7 @@ var KEYS = [
   'tasks',         // todays' tasks (array of task objects)
   'currentTask',   // current task (task object)
   'mood',          // today's mood (integer: 0-4)
+  'notifDoneTask', // last done task (task object), for notification
 ]
 var listeners = []
 

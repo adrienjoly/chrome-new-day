@@ -41,6 +41,12 @@
       <button class="button secondary btn-next" @click="onDone">It's done</button>
     </div>
     <div class="focus-notifs">
+      <notif-done
+        ref="notifDone"
+        :db="db"
+        :current-task="task"
+        @cancel="onDoneCancel"
+      />
       <notif-review />
       <page-indicator :pages="tasks" @page-changed="goToTask" />
     </div>
@@ -56,6 +62,7 @@
 </template>
 
 <script>
+  import NotifDone from './ui-notif-done.vue'
   import NotifReview from './ui-notif-review.vue'
   import PageIndicator from './ui-page-indicator.vue';
   import Vector from './ui-vector.vue';
@@ -64,6 +71,7 @@
   // TODO: integrate "Snooze" button on top-right corner
   export default {
     components: {
+      'notif-done': NotifDone,
       'notif-review': NotifReview,
       'page-indicator': PageIndicator,
       'vector': Vector,
@@ -125,13 +133,23 @@
       },
       onDone() {
         console.log('onDone')
+        this.$refs.notifDone.notifyDoneTask(this.task)
         // 1.set current task as done
         this.updateTaskByName(this.task.name, { done: true }, () => {
           console.log('=> goToNextTask')
           // 2. go to next task to be done (or review page)
           this.goToNextTask()
         })
-      }
+      },
+      onDoneCancel(task) {
+        console.log('cancelling task:', task)
+        // 1. set previous task as not done
+        this.updateTaskByName(task.name, { done: false }, () => {
+          console.log('=> goToNextTask')
+          // 2. go to next task to be done (or review page)
+          this.goToNextTask()
+        })
+      },
     }
   }
 </script>
