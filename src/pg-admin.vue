@@ -27,19 +27,21 @@
     data: () => ({
       currentTask: {},
       tasks: [],
+      tasksSubscriptionHandler: null,
     }),
-    created: function() {
-      this.db.subscribeToData('tasks', ({ key, value }) => {
+    created() {
+      this.tasksSubscriptionHandler = ({ key, value }) => {
         console.log('tasks:', value)
         this.tasks = value || []
-      })
+      }
+      this.db.subscribeToData('tasks', this.tasksSubscriptionHandler)
       this.db.subscribeToData('currentTask', ({ key, value }) => {
         console.log('currentTask:', value)
         this.currentTask = value || {}
       })
     },
-    destroyed: function() {
-      // TODO: this.db.unsubscribeToData('tasks')
+    destroyed() {
+      this.db.unsubscribeToData('tasks', this.tasksSubscriptionHandler)
     },
   }
 </script>

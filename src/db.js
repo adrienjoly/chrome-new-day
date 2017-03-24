@@ -20,7 +20,9 @@ const subscribeToData = (key, callback) => {
   fetchData(key, callback)
 }
 
-const unsubscribeToData = (key, callback) => {} // NOT IMPLEMENTED
+const unsubscribeToData = (key, callback) => {
+  chrome.storage.onChanged.removeListener(callback)
+}
 
 // calls back with { key }
 const setData = (key, data, callback) => {

@@ -22,6 +22,7 @@
     props: [ 'db', 'setCurrentTask' ],
     data: () => ({
       tasks: [],
+      tasksSubscriptionHandler: null,
     }),
     methods: {
       endOfDay() {
@@ -38,12 +39,13 @@
       }
     },
     created() {
-      this.db.subscribeToData('tasks', ({ key, value }) => {
+      this.tasksSubscriptionHandler = ({ key, value }) => {
         this.tasks = value || []
-      })
+      }
+      this.db.subscribeToData('tasks', this.tasksSubscriptionHandler)
     },
     destroyed() {
-      this.db.unsubscribeToData('tasks')
+      this.db.unsubscribeToData('tasks', this.tasksSubscriptionHandler)
     },
     mounted() {
       this.setCurrentTask() // will update timer and clear currentTask

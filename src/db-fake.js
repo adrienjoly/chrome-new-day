@@ -1,7 +1,14 @@
 // Fake storage (for local testing)
 
-var KEYS = [ 'tasks', 'currentTask', 'mood' ]
+var KEYS = [
+  'tasks',         // todays' tasks (array of task objects)
+  'currentTask',   // current task (task object)
+  'mood',          // today's mood (integer: 0-4)
+]
 var listeners = []
+
+console.info('FAKE DB\n call this to display state:\n',
+  JSON.stringify(KEYS), '.forEach((k) => console.log(k, localStorage.getItem(k)))')
 
 // clear local storage
 //KEYS.forEach((key) => localStorage.removeItem(key))
@@ -42,14 +49,17 @@ const subscribeToData = (key, handler) => {
   fetchData(key, handler)
 }
 
-const unsubscribeToData = (key, handler) => {
-  listeners.pop()
+const unsubscribeToData = (_key, _handler) => {
+  let index = listeners.findIndex(({ key, handler }) => key === _key && handler === _handler)
+  if (index !== -1) {
+    listeners.splice(index, 1) // remove that listener
+  }
 }
 
 // calls back with { key }
 const setData = (key, data, callback) => {
   localStorage.setItem(key, JSON.stringify(data))
-  //listeners.forEach((listener) => key === listener.key && fetchData(key, listener.handler))
+  listeners.forEach((listener) => key === listener.key && fetchData(key, listener.handler))
   callback({ key })
 }
 
