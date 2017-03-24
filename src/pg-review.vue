@@ -108,6 +108,10 @@
               })
 
             })
+          } else { // mood was set :-)
+
+            this.analytics.mood.rate(value)
+
           }
         })
       })
