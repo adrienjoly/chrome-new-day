@@ -6,6 +6,7 @@ import PgFocus from './pg-focus.vue'
 import PgReview from './pg-review.vue'
 import PgAdmin from './pg-admin.vue'
 import PgMood from './pg-mood.vue'
+import Analytics from './analytics'
 
 Vue.use(VueRouter)
 
