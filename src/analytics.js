@@ -54,6 +54,7 @@ function event(name, properties, privateProperties) {
 
   firebaseStore('event', name, properties, privateProperties);
 
+  // mixpanel may mutate the properties, so put him at the end
   mixpanel.track(name, properties);
 }
 
@@ -65,6 +66,7 @@ function page(name, properties, privateProperties) {
 
   firebaseStore('page', name, properties, privateProperties);
 
+  // mixpanel may mutate the properties, so put him at the end
   mixpanel.track(name, properties);
 }
 
