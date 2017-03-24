@@ -1,29 +1,56 @@
 <style>
+  .pg-review > div {
+    width: 400px;
+  }
+  .pg-review h1 {
+    font-weight: 300;
+    color: #333333;
+    font-size: 32px;
+  }
+  .pg-review h2 {
+    font-weight: 400;
+    font-size: 15px;
+    color: rgba(50,50,50, 0.5);
+    margin-top: 0;
+    margin-bottom: 30px;
+  }
 </style>
 
 <template>
-  <div class="pg-review">
-    <h1>Review</h1>
+  <div class="pg-review centered">
+    <div>
+      <h1>{{ today }}</h1>
+      <h2>Let's review your workday</h2>
+      <ol>
+        <li v-for="task, i in tasks" :key="task">
+          {{ task.name }} : 
+          spent {{ renderElapsed(task) }} / {{ task.minutes }} mn (initially estimated)
+        </li>
+      </ol>
 
-    <h2>Performance on your tasks</h2>
-    <ol>
-      <li v-for="task, i in tasks" :key="task">
-        {{ task.name }} : 
-        spent {{ renderElapsed(task) }} / {{ task.minutes }} mn (initially estimated)
-      </li>
-    </ol>
-
-    <button class="button" @click="endOfDay">Plan tomorrow's tasks</button>
+      <button class="button" @click="endOfDay">Plan tomorrow's tasks</button>
+    </div>
   </div>
 </template>
 
 <script>
+  import common from './common.js'
+  
+  const formatDate = common.formatDate
+  const renderMinutes = common.renderMinutes
+
   export default {
-    props: [ 'db', 'setCurrentTask' ],
+    props: [
+      'db',
+      'setCurrentTask',
+    ],
     data: () => ({
       tasks: [],
       tasksSubscriptionHandler: null,
     }),
+    computed: {
+      today: () => formatDate(new Date())
+    },
     methods: {
       endOfDay() {
         console.log('end of day')
