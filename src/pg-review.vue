@@ -42,6 +42,7 @@
   
   const formatDate = common.formatDate
   const renderMinutes = common.renderMinutes
+  const sumElapsedSecondsWithBreaks = common.sumElapsedSecondsWithBreaks
 
   export default {
     components: {
@@ -49,6 +50,7 @@
     },
     props: [
       'db',
+      'analytics',
       'setCurrentTask',
     ],
     data: () => ({
@@ -82,11 +84,24 @@
       this.db.unsubscribeToData('tasks', this.tasksSubscriptionHandler)
     },
     mounted() {
-      this.setCurrentTask() // will update timer and clear currentTask
-      this.db.fetchData('mood', ({ key, value }) => {
-        if (value === null || value === undefined) {
-          this.$router.push('/mood')
-        }
+      this.setCurrentTask(null, () => { // will update timer and clear currentTask
+        this.db.fetchData('mood', ({ key, value }) => {
+          if (value === null || value === undefined) {
+            this.$router.push('/mood')
+            this.analytics.mood.start({
+              reason: this.analytics.review.startReason.FINISHED, // TODO: depending on source ?
+              totalTime: sumElapsedSecondsWithBreaks(this.tasks),
+              breaks: [], // TODO
+              tasks: this.tasks.map((task) => ({
+                id: task.uuid,
+                name: task.name,
+                estimation: task.minutes * 60,
+                done: task.done,
+                timeSpent: task.elapsedMillisecs / 1000,
+              })),
+            })
+          }
+        })
       })
     },
   }
