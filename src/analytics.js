@@ -39,9 +39,9 @@ window.addEventListener('beforeunload', pageUnloaded);
 
 // --- HELPERS
 
-function firebaseStore(type, properties, privateProperties) {
+function firebaseStore(type, name, properties, privateProperties) {
   var uid = mixpanel.get_distinct_id();
-  var fbObj = Object.assign({}, properties, privateProperties, { type: type, uid: uid, time: Date() });
+  var fbObj = Object.assign({}, properties, privateProperties, { type: type, name: name, uid: uid, time: Date() });
   firebase.database().ref('events').push(fbObj);
 }
 
@@ -54,7 +54,7 @@ function event(name, properties, privateProperties) {
     eventAction: name
   });
 
-  firebaseStore('event', properties, privateProperties);
+  firebaseStore('event', name, properties, privateProperties);
 }
 
 function page(name, properties, privateProperties) {
@@ -65,7 +65,7 @@ function page(name, properties, privateProperties) {
     page: '/' + name
   });
 
-  firebaseStore('page', properties, privateProperties);
+  firebaseStore('page', name, properties, privateProperties);
 }
 
 function time(name) {
