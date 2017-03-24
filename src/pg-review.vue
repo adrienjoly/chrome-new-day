@@ -117,4 +117,11 @@
       })
     },
   }
+
+  /*
+  // TODO: track review analytic events:
+    startReason()
+    start()
+    comment()
+  */
 </script>

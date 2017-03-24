@@ -1,6 +1,9 @@
+== 0.1.5 features and analytics
  * feature: "done" notification + undo
  * bug fix: "undefined" day of the week
  * bug fix: subscriptions and unsubscriptions (causing bugs when deleting tasks from localhost)
+ * product: integrated analytics
+ * wip: review screen
 
 == 0.1.4 UI fixes
  * UI fix: re-styling of focus page
