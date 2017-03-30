@@ -3,7 +3,7 @@
     <p v-if="visible">
       Well done! 🎉 continue to stay focused
       <a @click.prevent="onCancel">Undo</a>
-      <a @click.prevent="reset">Close</a>
+      <a @click.prevent="clear">Close</a>
     </p>
   </div>
 </template>
@@ -56,7 +56,7 @@
       show() {
         console.log('SHOW')
         this.visible = true
-        this._setTimeout(this.hide.bind(this), DURATION)
+        this._setTimeout(this.clear.bind(this), DURATION)
       },
       hide(callback) {
         console.log('HIDE')
@@ -68,8 +68,8 @@
         this.db.setData(DB_KEY, doneTask, () => {})
         // => host component will display another task, and this component will update() => show()
       },
-      reset() {
-        this.db.setData(DB_KEY, null, () => {})
+      clear() {
+        reset(this.db) // => update => hide()
       },
       onCancel() {
         this.hide()
