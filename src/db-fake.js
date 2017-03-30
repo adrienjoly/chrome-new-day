@@ -5,6 +5,7 @@ var KEYS = [
   'currentTask',   // current task (task object)
   'mood',          // today's mood (integer: 0-4)
   'notifDoneTask', // last done task (task object), for notification
+  'relax',         // set when day is done. contains a `until` prop.
 ]
 var listeners = []
 

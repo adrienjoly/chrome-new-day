@@ -31,7 +31,7 @@
         </li>
       </ol>
 
-      <button class="button" @click="endOfDay">Plan tomorrow's tasks</button>
+      <button class="button" @click="endOfDay">Let's relax</button>
     </div>
   </div>
 </template>
@@ -43,6 +43,20 @@
   const formatDate = common.formatDate
   const renderMinutes = common.renderMinutes
   const sumElapsedSecondsWithBreaks = common.sumElapsedSecondsWithBreaks
+
+  const RESET_HOUR = 5 // a new day starts at 5 am
+
+  const tomorrow = () => {
+    var d = new Date()
+    if (d.getHours() >= RESET_HOUR) {
+      d.setDate(d.getDate() + 1)
+    }
+    d.setHours(RESET_HOUR)
+    d.setMinutes(0)
+    d.setSeconds(0)
+    d.setMilliseconds(0)
+    return d
+  }
 
   export default {
     components: {
@@ -63,8 +77,9 @@
     methods: {
       endOfDay() {
         console.log('end of day')
-        this.db.setData('mood', null, () => {
-          this.$router.push('/')
+        this.db.setData('relax', { until: tomorrow() }, () => {
+          this.$router.push('/relax')
+          this.db.setData('tasks', [], () => {}) // clear all tasks
         })
       },
       renderElapsed(task) {
@@ -85,33 +100,31 @@
     },
     mounted() {
       this.setCurrentTask(null, () => { // will update timer and clear currentTask
-        this.db.fetchData('mood', ({ key, value }) => {
-          if (value === null || value === undefined) {
+        this.db.fetchData(null, ({ key, value }) => {
+          const mood = value.mood
+          console.log('review data:', value)
+          if (value.relax) {
+            this.$router.push('/relax')
+          } else if (mood === null || mood === undefined) {
             this.$router.push('/mood')
-
-            this.db.fetchData('reasonForReview', ({ key, value }) => {
-              const reasonForReview = value || this.analytics.review.startReason.FINISHED
-
-              this.db.setData('reasonForReview', null, () => {})
-
-              this.analytics.mood.start({
-                reason: reasonForReview,
-                totalTime: sumElapsedSecondsWithBreaks(this.tasks),
-                breaks: [], // TODO
-                tasks: this.tasks.map((task) => ({
-                  id: task.uuid,
-                  name: task.name,
-                  estimation: task.minutes * 60,
-                  done: task.done,
-                  timeSpent: task.elapsedMillisecs / 1000,
-                })),
-              })
-
+            // transfer reasonForReview from local storage to back-end
+            const reasonForReview = value.reasonForReview || this.analytics.review.startReason.FINISHED
+            this.db.setData('reasonForReview', null, () => {})
+            this.analytics.mood.start({
+              reason: reasonForReview,
+              totalTime: sumElapsedSecondsWithBreaks(this.tasks),
+              breaks: [], // TODO
+              tasks: this.tasks.map((task) => ({
+                id: task.uuid,
+                name: task.name,
+                estimation: task.minutes * 60,
+                done: task.done,
+                timeSpent: task.elapsedMillisecs / 1000,
+              })),
             })
-          } else { // mood was set :-)
-
-            this.analytics.mood.rate(value)
-
+          } else { // mood was set => transfer to back-end, and stay on review page
+            this.analytics.mood.rate(mood)
+            this.db.setData('mood', null, () => {})
           }
         })
       })

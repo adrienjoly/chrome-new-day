@@ -175,16 +175,21 @@
         return
       }
       this.db.fetchData(null, ({ key, value }) => {
+        value = value || {}
         // if user is supposed to be focusing on a task => redirect to focus page
-        if (value && value.currentTask) {
+        if (value.currentTask) {
           const index = value.tasks.findIndex((t) => t.name === value.currentTask.name)
           if (index !== -1) {
             this.$router.push('/focus/' + index)
             return // to prevent analytics event "page-plan"
           }
-        } else {
-          NotifDone.reset(this.db) // clears the "task done / undo" notification
+        } else if (value.tasks.length > 0 && value.tasks.filter((t) => !t.done).length === 0) { // done all tasks
+          this.$router.push('/review')
+        } else if (value.relax) {
+          this.$router.push('/relax')
+          return // to prevent analytics event "page-plan"
         }
+        NotifDone.reset(this.db) // clears the "task done / undo" notification
         this.analytics.plan.start()
         // TODO: redirect to /review if all tasks of the day are done
       })
