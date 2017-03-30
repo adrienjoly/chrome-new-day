@@ -75,80 +75,45 @@
       'vector': Vector,
     },
     props: [
-      'currentTask',
-      'taskindex',
+      'taskindex', // route parameter
+      'currentTask', // db subscription
+      'tasks', // db subscription
       'db',
-      'tasks',
       'analytics',
       'setCurrentTask',
       'goToNextTask',
       'updateTaskByName',
     ],
     data: () => ({
-      //task: {},
       leftArrow: require('./svg/arrow-back.svg'),
       rightArrow: require('./svg/arrow-forward.svg'),
     }),
-    /*
-    computed: {
-      task() {
-        return this.tasks[parseInt(this.taskindex)]
-      },
-    },
-    */
-    /*
-    watch: {
-      // call again the method if the route changes
-      '$route': 'fetchData'
-    },
-    */
-    mounted() { this.fetchData() },
-    updated() { this.fetchData(true) },
-    /*
-    mounted() {
-      console.log('FOCUS mnt:', this.taskindex, this.task)
-    },
-    updated() {
-      console.log('FOCUS upd:', this.taskindex, this.task)
-    },
-    */
     methods: {
       skipToNext() {
-        const tasks = this.tasks
-        const index = (parseInt(this.taskindex) + 1) % tasks.length
+        const index = (parseInt(this.taskindex) + 1) % this.tasks.length
         this.analytics.focus.moveForward({
           index: index,
-          taskId: tasks[index].uuid,
+          taskId: this.tasks[index].uuid,
         })
-        this.setCurrentTask(tasks[index]) // will lead to that task's focus page
+        this.setCurrentTask(this.tasks[index]) // will lead to that task's focus page
       },
       skipToPrev() {
-        const tasks = this.tasks
-        const index = (tasks.length + parseInt(this.taskindex) - 1) % tasks.length
+        const index = (this.tasks.length + parseInt(this.taskindex) - 1) % this.tasks.length
         this.analytics.focus.moveBackward({
           index: index,
-          taskId: tasks[index].uuid,
+          taskId: this.tasks[index].uuid,
         })
-        this.setCurrentTask(tasks[index]) // will lead to that task's focus page
+        this.setCurrentTask(this.tasks[index]) // will lead to that task's focus page
       },
       goToTask(taskIndex) {
-        console.log('goToTask', taskIndex)
-        const tasks = this.tasks
         this.analytics.focus.changePage({
           index: parseInt(this.taskindex),
-          taskId: tasks[parseInt(this.taskindex)].uuid,
+          taskId: this.tasks[parseInt(this.taskindex)].uuid,
         }, {
           index: taskIndex,
-          taskId: tasks[taskIndex].uuid,
+          taskId: this.tasks[taskIndex].uuid,
         })
-        this.setCurrentTask(tasks[taskIndex]) // will lead to that task's focus page
-      },
-      fetchData() {
-        //console.log('fetchdata')
-        //this.taskindex = parseInt(this.$route.params.taskindex)
-        console.log('FOCUS fetchdata', this./*$route.params.*/taskindex)
-        //this.task = this.tasks[this.taskindex]
-        console.log('FOCUS fetchdata', this.taskindex, this.task)
+        this.setCurrentTask(this.tasks[taskIndex]) // will lead to that task's focus page
       },
       onDone() {
         this.$refs.notifDone.notifyDoneTask(this.currentTask)

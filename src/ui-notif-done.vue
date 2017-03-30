@@ -10,7 +10,7 @@
 
 <script>
   const DB_KEY = 'notifDoneTask'
-  const DURATION = 4 * 1000 // notif will disappear after 30 seconds
+  const DURATION = 4 * 1000 // notif will disappear after 4 seconds
   function reset(db) {
     db.setData(DB_KEY, null, () => {})
   }
