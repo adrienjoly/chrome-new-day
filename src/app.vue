@@ -83,6 +83,10 @@
 
   const db = window.chrome && window.chrome.storage ? dbChrome : dbFake
 
+  try {
+    console.log('running "new day" chrome extension, version:', chrome.runtime.getManifest().version)
+  } catch(e) {}
+
   export default {
     name: 'app',
     data: () => ({
