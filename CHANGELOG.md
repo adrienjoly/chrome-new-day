@@ -1,3 +1,9 @@
+== 0.2.0 relax page and styling of planning page
+ * feature: a new "relax" page, when your day is over
+ * ui: better styling on the planning page
+ * product: refactored the routing system, and shared subscriptions
+ * wip: review screen
+
 == 0.1.5 features and analytics
  * feature: "done" notification + undo
  * bug fix: "undefined" day of the week
