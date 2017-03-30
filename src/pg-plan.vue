@@ -180,6 +180,7 @@
           const index = value.tasks.findIndex((t) => t.name === value.currentTask.name)
           if (index !== -1) {
             this.$router.push('/focus/' + index)
+            return // to prevent analytics event "page-plan"
           }
         } else {
           NotifDone.reset(this.db) // clears the "task done / undo" notification
