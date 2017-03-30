@@ -1,0 +1,98 @@
+$space-unit:        5px;
+
+$space: (
+  1:                $space-unit * 1,
+  2:                $space-unit * 2,
+  3:                $space-unit * 3,
+  4:                $space-unit * 6,
+  5:                $space-unit * 9,
+  6:                $space-unit * 12
+);
+
+@function space($variant-name){
+  @return map-get($space, $variant-name);
+}
+
+@each $key, $value in $space {
+  .pt#{$key}        { padding-top:    map-get($space, $key);  }
+  .pr#{$key}        { padding-right:  map-get($space, $key);  }
+  .pb#{$key}        { padding-bottom: map-get($space, $key);  }
+  .pl#{$key}        { padding-left:   map-get($space, $key);  }
+  .pw#{$key}        { padding-left:   map-get($space, $key); padding-right:  map-get($space, $key);  }
+  .ph#{$key}        { padding-top:    map-get($space, $key); padding-bottom: map-get($space, $key);  }
+
+  .mt#{$key}        { margin-top:    map-get($space, $key);  }
+  .mr#{$key}        { margin-right:  map-get($space, $key);  }
+  .mb#{$key}        { margin-bottom: map-get($space, $key);  }
+  .ml#{$key}        { margin-left:   map-get($space, $key);  }
+  .mw#{$key}        { margin-left:   map-get($space, $key); margin-right:  map-get($space, $key);  }
+  .mh#{$key}        { margin-top:    map-get($space, $key); margin-bottom: map-get($space, $key);  }
+}
+
+/* Colors
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+$colors: (
+  gray: (
+    pale:           #eee,
+    light:          #d9d9d9,
+    medium:         #999,
+    dark:           #333
+  ),
+  green: (
+    medium:         #0FCD64,
+    dark:           #0DB859
+  ),
+  orange: (
+    pale:           #FFF8EE,
+    medium:         #F5A623,
+    dark:           #DC951F
+  )
+);
+
+@function color($color, $variant){
+  $color: map-get($colors, $color);
+  @return map-get($color, $variant);
+}
+
+/* Fonts
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+@import             url(https://fonts.googleapis.com/css?family=Roboto:100,300,400,500);
+$font:              "Roboto", Helvetica, Arial, sans;
+
+.font-small {
+  font-family:      $font;
+  font-weight:      400;
+  font-size:        12px;
+  line-height:      20px;
+}
+
+.font-regular {
+  font-family:      $font;
+  font-weight:      400;
+  font-size:        15px;
+  line-height:      20px;
+}
+
+.font-medium {
+  font-family:      $font;
+  font-weight:      300;
+  font-size:        32px;
+  line-height:      45px;
+}
+
+.font-large {
+  font-family:      $font;
+  font-weight:      100;
+  font-size:        55px;
+  line-height:      60px;
+}
+
+
+/* Radius
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+$radius-small:      2px;
+$radius-base:       4px;
+

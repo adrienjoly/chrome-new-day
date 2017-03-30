@@ -1,0 +1,39 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family:  $font;
+  position:     relative;
+  height:       100%;
+  padding:      0;
+  margin:       0;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  @extend .font-medium;
+}
+
+h2 {
+  @extend .font-regular;
+  color: color(gray,medium);
+}
+
+h3 {
+
+}
+
+p {
+  @extend .font-regular;
+  color: color(gray,dark);
+}
+
