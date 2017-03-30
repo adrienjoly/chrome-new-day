@@ -129,8 +129,6 @@
 </template>
 
 <script>
-  const HOUR_END_OF_DAY = 21 // hour of the day when review screen is to be shown systematically
-
   // TODO: (styling) improve integration of drag&drop
   
   import common from './common.js'
@@ -144,6 +142,7 @@
   export default {
     props: [
       'db',
+      'tasks',
       'analytics',
       'goToNextTask',
       'updateTaskByName',
@@ -155,44 +154,10 @@
     data: () => ({
       askDurationFor: null,
       afterDurationFct: null, // function to call after setting a task's duration
-      tasks: [],
-      tasksSubscriptionHandler: null,
     }),
-    created() {
-      this.tasksSubscriptionHandler = ({ key, value }) => {
-        this.tasks = value || []
-      }
-      this.db.subscribeToData('tasks', this.tasksSubscriptionHandler)
-    },
-    destroyed() {
-      this.db.unsubscribeToData('tasks', this.tasksSubscriptionHandler)
-    },
     mounted() {
-      if (new Date().getHours() >= HOUR_END_OF_DAY) {
-        this.db.setData('reasonForReview', this.analytics.review.startReason.OVERTIME, () => {
-          this.$router.push('/review')
-        })
-        return
-      }
-      this.db.fetchData(null, ({ key, value }) => {
-        value = value || {}
-        // if user is supposed to be focusing on a task => redirect to focus page
-        if (value.currentTask) {
-          const index = value.tasks.findIndex((t) => t.name === value.currentTask.name)
-          if (index !== -1) {
-            this.$router.push('/focus/' + index)
-            return // to prevent analytics event "page-plan"
-          }
-        } else if (value.tasks.length > 0 && value.tasks.filter((t) => !t.done).length === 0) { // done all tasks
-          this.$router.push('/review')
-        } else if (value.relax) {
-          this.$router.push('/relax')
-          return // to prevent analytics event "page-plan"
-        }
-        NotifDone.reset(this.db) // clears the "task done / undo" notification
-        this.analytics.plan.start()
-        // TODO: redirect to /review if all tasks of the day are done
-      })
+      NotifDone.reset(this.db) // clears the "task done / undo" notification
+      this.analytics.plan.start()
     },
     computed: {
       today: function() { return formatDate(new Date()); }

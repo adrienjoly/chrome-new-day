@@ -9,15 +9,14 @@ var KEYS = [
 ]
 var listeners = []
 
-console.info('FAKE DB\n call this to display state:\n',
+console.info('[FAKE DB]\n === display state:\n',
   JSON.stringify(KEYS), '.forEach((k) => console.log(k, localStorage.getItem(k)))')
 
-// clear local storage
-//KEYS.forEach((key) => localStorage.removeItem(key))
+console.info('[FAKE DB]\n === clear state:\n',
+  JSON.stringify(KEYS), '.forEach((k) => console.log(k, localStorage.removeItem(k)))')
 
 // print local storage
 //fetchData(null, ({ key, value }) => console.log('[db-fake] stored:', value))
-//[ 'tasks', 'currentTask', 'mood' ].forEach((k) => console.log(k, localStorage.getItem(k)))
 
 // fired when update happened on another tab
 window.addEventListener('storage', function(e) {  

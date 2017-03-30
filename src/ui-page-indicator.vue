@@ -35,7 +35,7 @@
   <div class="page-indicator">
     <div v-for="(page, index) in pages" 
       class="item"
-      :class="{ current: !!page.current, done: !!page.done }"
+      :class="{ current: index == current, done: !!page.done }"
       @click.prevent="selectPage(index)"
        />
   </div>
@@ -43,7 +43,7 @@
 
 <script>
   export default {
-    props: [ 'pages' ],
+    props: [ 'pages', 'current' ],
     methods: {
       selectPage: function(index) {
         this.$emit('page-changed', index);

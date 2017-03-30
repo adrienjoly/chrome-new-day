@@ -12,8 +12,9 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   routes: [
-    { path: '/', name: 'plan', component: PgPlan },
-    { path: '/focus/:taskindex', name: 'focus', component: PgFocus },
+    { path: '/', name: 'home' },
+    { path: '/plan', name: 'plan', component: PgPlan },
+    { path: '/focus/:taskindex', name: 'focus', component: PgFocus, props: true },
     { path: '/mood', name: 'mood', component: PgMood },
     { path: '/review', name: 'review', component: PgReview },
     { path: '/relax', name: 'relax', component: PgRelax },

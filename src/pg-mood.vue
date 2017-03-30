@@ -53,7 +53,11 @@
   import Vector from './ui-vector.vue';
 
   export default {
-    props: [ 'db' ],
+    props: [
+      'db',
+      'analytics',
+      'goToNextTask',
+    ],
     data: () => ({
       icons: [
         require('./svg/mood-0.svg'),
@@ -69,8 +73,9 @@
     methods: {
       pickMood: function(mood) {
         console.log("mood> " + mood);
+        this.analytics.mood.rate(mood)
         this.db.setData('mood', mood, () => {
-          this.$router.push('/review');
+          this.goToNextTask(); // will lead to /review
         })
       }
     }

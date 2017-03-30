@@ -37,18 +37,18 @@
 <template>
   <div class="pg-focus centered">
     <div class="centered">
-      <h1>{{ task.name }}</h1>
+      <h1>{{ currentTask.name }}</h1>
       <button class="button secondary btn-next" @click="onDone">It's done</button>
     </div>
     <div class="focus-notifs">
       <notif-done
         ref="notifDone"
         :db="db"
-        :current-task="task"
+        :current-task="currentTask"
         @cancel="onDoneCancel"
       />
       <notif-review @gotoreview="onGoToReview" />
-      <page-indicator :pages="tasks" @page-changed="goToTask" />
+      <page-indicator :pages="tasks" :current="taskindex" @page-changed="goToTask" />
     </div>
     <div class="arrow-container">
       <div class="arrow" @click.prevent="skipToPrev">
@@ -67,8 +67,6 @@
   import PageIndicator from './ui-page-indicator.vue';
   import Vector from './ui-vector.vue';
 
-  // TODO: polish
-  // TODO: integrate "Snooze" button on top-right corner
   export default {
     components: {
       'notif-done': NotifDone,
@@ -77,104 +75,100 @@
       'vector': Vector,
     },
     props: [
+      'currentTask',
+      'taskindex',
       'db',
-      //'tasks', // TODO: add this line, and remove fetchData() calls
+      'tasks',
       'analytics',
       'setCurrentTask',
       'goToNextTask',
       'updateTaskByName',
     ],
     data: () => ({
-      taskindex: null,
-      task: {},
-      tasks: [],
+      //task: {},
       leftArrow: require('./svg/arrow-back.svg'),
       rightArrow: require('./svg/arrow-forward.svg'),
     }),
+    /*
+    computed: {
+      task() {
+        return this.tasks[parseInt(this.taskindex)]
+      },
+    },
+    */
+    /*
     watch: {
       // call again the method if the route changes
       '$route': 'fetchData'
     },
+    */
     mounted() { this.fetchData() },
-    //updated() { this.fetchData(true) },
+    updated() { this.fetchData(true) },
+    /*
+    mounted() {
+      console.log('FOCUS mnt:', this.taskindex, this.task)
+    },
+    updated() {
+      console.log('FOCUS upd:', this.taskindex, this.task)
+    },
+    */
     methods: {
       skipToNext() {
-        this.db.fetchData('tasks', ({ key, value }) => {
-          const tasks = value || []
-          const index = (this.taskindex + 1) % tasks.length
-          console.log('skipToNext', index)
-          this.$router.push('/focus/' + index)
-          this.analytics.focus.moveForward({
-            index: index,
-            taskId: tasks[index].uuid,
-          })
+        const tasks = this.tasks
+        const index = (parseInt(this.taskindex) + 1) % tasks.length
+        this.analytics.focus.moveForward({
+          index: index,
+          taskId: tasks[index].uuid,
         })
+        this.setCurrentTask(tasks[index]) // will lead to that task's focus page
       },
       skipToPrev() {
-        this.db.fetchData('tasks', ({ key, value }) => {
-          const tasks = value || []
-          const index = (tasks.length + this.taskindex - 1) % tasks.length
-          console.log('skipToPrev', index)
-          this.$router.push('/focus/' + index)
-          this.analytics.focus.moveBackward({
-            index: index,
-            taskId: tasks[index].uuid,
-          })
+        const tasks = this.tasks
+        const index = (tasks.length + parseInt(this.taskindex) - 1) % tasks.length
+        this.analytics.focus.moveBackward({
+          index: index,
+          taskId: tasks[index].uuid,
         })
+        this.setCurrentTask(tasks[index]) // will lead to that task's focus page
       },
       goToTask(taskIndex) {
-        this.db.fetchData('tasks', ({ key, value }) => {
-          const tasks = value || []
-          this.analytics.focus.changePage({
-            index: this.taskindex,
-            taskId: tasks[this.taskindex].uuid,
-          }, {
-            index: taskIndex,
-            taskId: tasks[taskIndex].uuid,
-          })
-          this.$router.push('/focus/' + taskIndex)
+        console.log('goToTask', taskIndex)
+        const tasks = this.tasks
+        this.analytics.focus.changePage({
+          index: parseInt(this.taskindex),
+          taskId: tasks[parseInt(this.taskindex)].uuid,
+        }, {
+          index: taskIndex,
+          taskId: tasks[taskIndex].uuid,
         })
+        this.setCurrentTask(tasks[taskIndex]) // will lead to that task's focus page
       },
       fetchData() {
-        this.db.fetchData('tasks', ({ key, value }) => {
-          const tasks = value || []
-          // 1. update view data based on route parameter
-          this.taskindex = parseInt(this.$route.params.taskindex)
-          this.tasks = tasks.map((task, i) => ({
-            title: task.name,
-            done: task.done,
-            current: i === this.taskindex,
-          }))
-          // 2. update current task (based on route parameter)
-          const now = new Date().getTime()
-          this.task = Object.assign({}, tasks[this.taskindex], { lastStart: now })
-          this.setCurrentTask(this.task) // will update timer and persist in db
-        })
+        //console.log('fetchdata')
+        //this.taskindex = parseInt(this.$route.params.taskindex)
+        console.log('FOCUS fetchdata', this./*$route.params.*/taskindex)
+        //this.task = this.tasks[this.taskindex]
+        console.log('FOCUS fetchdata', this.taskindex, this.task)
       },
       onDone() {
-        console.log('onDone')
-        this.$refs.notifDone.notifyDoneTask(this.task)
-        this.analytics.focus.finishTask(this.task.uuid)
-        // 1.set current task as done
-        this.updateTaskByName(this.task.name, { done: true }, () => {
-          console.log('=> goToNextTask')
-          // 2. go to next task to be done (or review page)
+        this.$refs.notifDone.notifyDoneTask(this.currentTask)
+        this.analytics.focus.finishTask(this.currentTask.uuid)
+        // set current task as done
+        this.updateTaskByName(this.currentTask.name, { done: true }, () => {
           this.goToNextTask()
         })
       },
       onDoneCancel(task) {
         console.log('cancelling task:', task)
         this.analytics.focus.undoFinishTask(task.uuid)
-        // 1. set previous task as not done
+        // set previous task as not done
         this.updateTaskByName(task.name, { done: false }, () => {
-          console.log('=> goToNextTask')
-          // 2. go to next task to be done (or review page)
           this.goToNextTask()
         })
       },
       onGoToReview() {
         this.db.setData('reasonForReview', this.analytics.review.startReason.MANUALLY, () => {
-          this.$router.push('/review')
+          this.$router.push('/mood') // TODO: do that in app.vue instead
         })
       },
     }

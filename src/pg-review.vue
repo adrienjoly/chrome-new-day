@@ -27,7 +27,7 @@
       <ol>
         <li v-for="task, i in tasks" :key="task">
           {{ task.name }} : 
-          spent {{ renderElapsed(task) }} / {{ task.minutes }} mn (initially estimated)
+          {{ renderElapsed(task) }} / {{ task.minutes }} mn
         </li>
       </ol>
 
@@ -64,22 +64,22 @@
     },
     props: [
       'db',
+      'tasks',
       'analytics',
-      'setCurrentTask',
+      'goToNextTask',
     ],
-    data: () => ({
-      tasks: [],
-      tasksSubscriptionHandler: null,
-    }),
     computed: {
       today: () => formatDate(new Date())
     },
     methods: {
       endOfDay() {
-        console.log('end of day')
         this.db.setData('relax', { until: tomorrow() }, () => {
-          this.$router.push('/relax')
-          this.db.setData('tasks', [], () => {}) // clear all tasks
+          this.db.setData('mood', null, () => {
+            this.db.setData('tasks', [], () => { // clear all tasks
+              this.goToNextTask() // will lead to the /relax page
+            })
+          })
+          //this.$router.push('/relax')
         })
       },
       renderElapsed(task) {
@@ -89,44 +89,23 @@
         return (minutes ? minutes + ' minutes and ' : '') + seconds + ' seconds'
       }
     },
-    created() {
-      this.tasksSubscriptionHandler = ({ key, value }) => {
-        this.tasks = value || []
-      }
-      this.db.subscribeToData('tasks', this.tasksSubscriptionHandler)
-    },
-    destroyed() {
-      this.db.unsubscribeToData('tasks', this.tasksSubscriptionHandler)
-    },
     mounted() {
-      this.setCurrentTask(null, () => { // will update timer and clear currentTask
-        this.db.fetchData(null, ({ key, value }) => {
-          const mood = value.mood
-          console.log('review data:', value)
-          if (value.relax) {
-            this.$router.push('/relax')
-          } else if (mood === null || mood === undefined) {
-            this.$router.push('/mood')
-            // transfer reasonForReview from local storage to back-end
-            const reasonForReview = value.reasonForReview || this.analytics.review.startReason.FINISHED
-            this.db.setData('reasonForReview', null, () => {})
-            this.analytics.mood.start({
-              reason: reasonForReview,
-              totalTime: sumElapsedSecondsWithBreaks(this.tasks),
-              breaks: [], // TODO
-              tasks: this.tasks.map((task) => ({
-                id: task.uuid,
-                name: task.name,
-                estimation: task.minutes * 60,
-                done: task.done,
-                timeSpent: task.elapsedMillisecs / 1000,
-              })),
-            })
-          } else { // mood was set => transfer to back-end, and stay on review page
-            this.analytics.mood.rate(mood)
-            this.db.setData('mood', null, () => {})
-          }
+      this.db.fetchData('reasonForReview', ({key, value}) => {
+        // transfer reasonForReview from local storage to back-end
+        const reasonForReview = value || this.analytics.review.startReason.FINISHED
+        this.analytics.mood.start({
+          reason: reasonForReview,
+          totalTime: sumElapsedSecondsWithBreaks(this.tasks),
+          breaks: [], // TODO
+          tasks: this.tasks.map((task) => ({
+            id: task.uuid,
+            name: task.name,
+            estimation: task.minutes * 60,
+            done: task.done,
+            timeSpent: task.elapsedMillisecs / 1000,
+          })),
         })
+        this.db.setData('reasonForReview', null, () => {})
       })
     },
   }

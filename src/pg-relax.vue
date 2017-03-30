@@ -37,6 +37,7 @@
     },
     props: [
       'db',
+      'goToNextTask',
     ],
     data: () => ({
       icon: require('./svg/mood-4.svg'),
@@ -46,7 +47,7 @@
         const relax = value
         if (!relax || new Date() > new Date(relax.until)) {
           this.db.setData('relax', null, () => {
-            this.$router.push('/') // plan the new day :-)
+            this.goToNextTask() // plan the new day :-)
           })
         } else {
           console.log('relaxing until', new Date(relax.until), '...')
