@@ -44,7 +44,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js' // or .runtime for development mode
+      'vue$': 'vue/dist/vue.esm.js', // or .runtime for development mode
     }
   },
   devServer: {

@@ -1,16 +1,9 @@
-<style>
-  * {
-    font-family: 'Roboto', sans-serif;
-  }
-  html {
-    height: 100%;
-  }
-  body {
-    position: relative;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-  }
+<style lang="scss">
+
+  @import "styles/variables.scss";
+  @import "styles/basics.scss";
+  @import "styles/buttons.scss";
+
   .centered {
     top: 0px;
     position: absolute;
@@ -22,38 +15,7 @@
     text-align: center;
     align-items: center;
   }
-  .button {
-    box-sizing: border-box;
-    border: none;
-    padding: 10px 40px;
-    color: white;
-    text-decoration: none;
-    cursor: pointer;
-    border-radius: 4px;
-    font-weight: medium;
-    font-size: 1.5em;
-    background-color: #F5A623;
-    outline: none;
-    transition: box-shadow 0.2s ease-in-out;
-  }
 
-  .button:active {
-    box-shadow: inset 0px 2px 2px 1px rgba(0,0,0,0.2);
-  }
-
-  .button.outline {
-    background-color: white;
-    border: 2px solid #F5A623;
-    color: #F5A623;
-  }
-
-  .button.outline:active {
-    box-shadow: inset 0px 1px 1px 1px rgba(0,0,0,0.2);
-  }
-
-  .button.secondary {
-    background-color: #32C9B3;
-  }
 </style>
 
 <template>
