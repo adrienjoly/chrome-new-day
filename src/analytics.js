@@ -12,7 +12,10 @@
 
 // MP
 import mixpanel from 'mixpanel-browser';
-import * as firebase from "firebase";
+//import * as firebase from "firebase";
+import * as firebase from "firebase/app";
+import 'firebase/database';
+
 var config = {
   apiKey: "AIzaSyANNAaxb84uIvvPW3e7TxAi23r4QJWRtQk",
   databaseURL: "https://newday-56d87.firebaseio.com/"
