@@ -36,16 +36,6 @@
       }
       this.db.subscribeToData(DB_KEY, this.subscriptionHandler)
     },
-    /*
-    mounted() {
-      console.log('notif done mounted')
-      this.displayIfNecessary()
-    },
-    updated() {
-      console.log('notif done updated')
-      this.displayIfNecessary()
-    },
-    */
     unmounted() {
       this._setTimeout()
     },
@@ -74,18 +64,6 @@
         this._setTimeout()
         //this.db.setData(DB_KEY, null, () => {})
       },
-      /*
-      displayIfNecessary() {
-        this.db.fetchData(DB_KEY, ({ key, value }) => {
-          console.log('notif done displayIfNecessary:', value, typeof value)
-          if (value) {
-            this.show()
-          } else {
-            this.hide()
-          }
-        })
-      },
-      */
       notifyDoneTask(doneTask) {
         this.db.setData(DB_KEY, doneTask, () => {})
         // => host component will display another task, and this component will update() => show()
