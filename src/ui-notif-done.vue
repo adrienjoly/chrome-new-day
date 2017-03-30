@@ -77,6 +77,7 @@
         this.hide()
         this.db.fetchData(DB_KEY, ({ key, value }) => {
           this.$emit('cancel', value)
+          reset(this.db)
         })
       },
     },
