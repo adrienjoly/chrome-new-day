@@ -2,7 +2,7 @@
   <div class="notif-done">
     <p v-if="visible">
       Well done! 🎉 continue to stay focused
-      <a @click.prevent="onCancel">Undo</a>
+      <a @click.prevent="cancel">Undo</a>
       <a @click.prevent="clear">Close</a>
     </p>
   </div>
@@ -12,11 +12,10 @@
   const DB_KEY = 'notifDoneTask'
   const DURATION = 4 * 1000 // notif will disappear after 30 seconds
   function reset(db) {
-    // static function (so that it can be called from pg-plan, without instanciating the component)
     db.setData(DB_KEY, null, () => {})
   }
   export default {
-    reset,
+    reset, // static function (so that it can be called from pg-plan, without instanciating the component)
     props: [
       'db',
     ],
@@ -44,6 +43,16 @@
       this.db.unsubscribeToData(DB_KEY, this.subscriptionHandler)
     },
     methods: {
+
+      /* public methods */
+
+      notifyDoneTask(doneTask) { // called by pg-focus
+        this.db.setData(DB_KEY, doneTask, () => {})
+        // => host component will display another task, and this component will update() => show()
+      },
+
+      /* private methods */
+
       _setTimeout(fct, ms) {
         if (this.timeout) {
           clearTimeout(this.timeout)
@@ -54,24 +63,17 @@
         }
       },
       show() {
-        console.log('SHOW')
         this.visible = true
         this._setTimeout(this.clear.bind(this), DURATION)
       },
-      hide(callback) {
-        console.log('HIDE')
+      hide() {
         this.visible = false
         this._setTimeout()
-        //this.db.setData(DB_KEY, null, () => {})
-      },
-      notifyDoneTask(doneTask) {
-        this.db.setData(DB_KEY, doneTask, () => {})
-        // => host component will display another task, and this component will update() => show()
       },
       clear() {
         reset(this.db) // => update => hide()
       },
-      onCancel() {
+      cancel() {
         this.hide()
         this.db.fetchData(DB_KEY, ({ key, value }) => {
           this.$emit('cancel', value)
