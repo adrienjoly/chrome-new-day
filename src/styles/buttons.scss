@@ -44,4 +44,8 @@
 .button.secondary,
 .btn.btn-secondary {
   background-color: color(green,medium);
+  transition: .1s ease transform;
+  &:hover {
+    transform: scale(1.1);
+  }
 }

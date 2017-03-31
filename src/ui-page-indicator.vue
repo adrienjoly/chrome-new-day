@@ -26,8 +26,9 @@
   }
 
   .page-indicator .item.current {
-    border-color:         color(green,medium);
+    // border-color:         color(green,medium);
     background-color:     white;
+    box-shadow: 0 0 0 1px color(green,medium);
   }
 
   .page-indicator .item.done {

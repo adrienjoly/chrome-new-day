@@ -1,16 +1,26 @@
+<style lang="scss">
+
+  .notif-done {
+    // display: block;
+    text-align: center;
+    // width: 100%;
+  }
+
+</style>
+
 <template>
   <div class="notif-done">
-    <p v-if="visible">
-      Well done! 🎉 continue to stay focused
-      <a @click.prevent="onCancel">Undo</a>
-      <a @click.prevent="reset">Close</a>
+    <p class="meta" v-if="visible">
+      <span class="pw2">Well done! 🎉 continue to stay focused ✌️</span>
+      <a class="link" @click.prevent="onCancel">Undo</a>
+      <a class="link" @click.prevent="reset">Close</a>
     </p>
   </div>
 </template>
 
 <script>
   const DB_KEY = 'notifDoneTask'
-  const DURATION = 4 * 1000 // notif will disappear after 30 seconds
+  const DURATION = 5 * 1000 // notif will disappear after 30 seconds
   function reset(db) {
     // static function (so that it can be called from pg-plan, without instanciating the component)
     db.setData(DB_KEY, null, () => {})

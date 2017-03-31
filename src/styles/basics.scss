@@ -8,6 +8,7 @@ html {
 
 body {
   font-family:  $font;
+  @extend       .font-regular;
   position:     relative;
   height:       100%;
   padding:      0;
@@ -46,12 +47,22 @@ h3 {
 }
 
 p {
-  @extend .font-regular;
   color: color(gray,dark);
 }
 
-p.meta {
+p.meta,
+span.meta {
   color: color(gray,medium);
+}
+
+.link {
+  cursor: pointer;
+  color: color(orange, medium);
+  font-weight: 400;
+  padding: 0 space(1);
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .text-center {
