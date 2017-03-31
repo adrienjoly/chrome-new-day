@@ -1,54 +1,74 @@
-<style>
+<style lang="scss">
+
+  @import "styles/variables.scss";
+  @import "styles/basics.scss";
+  @import "styles/buttons.scss";
+
   .pg-focus h1 {
-    font-size: 64px;
+    @extend .font-large;
+    padding: space(4) 0; 
   }
+
+  .pg-focus .header {
+    z-index:  20;
+    position: relative;
+    padding:  space(5);
+  }
+
   .focus-notifs {
-    position: absolute;
-    top: 0;
+    position:     absolute;
+    z-index:      30;
+    top:          space(5);
+    left:         0;
+    right:        0;
+    width:        100%;
   }
   
   /* navigation */
 
   .arrow-container {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, 0px);
-    bottom: 50px;
+    position:     absolute;
+    left:         50%;
+    transform:    translate(-50%, 0px);
+    bottom:       space(5);
   }
 
   .arrow {
-    margin: 0px 10px;
-    display: inline-block;
-    width: 64px;
-    height: 64px;
-    cursor: pointer;
+    cursor:       pointer;
+    margin:       0px space(2);
+    display:      inline-block;
+    width:        space(6);
+    height:       space(6);
   }
 
   .arrow:hover circle {
-    fill: rgba(175,175,175,0.05);
+    fill: color(gray,pale);
   }
 
   .arrow:active circle {
-    fill: rgba(100,100,100,0.1);
+    fill: color(gray,light);
   }
 
 </style>
 
 <template>
-  <div class="pg-focus centered">
-    <div class="centered">
-      <h1>{{ currentTask.name }}</h1>
-      <button class="button secondary btn-next" @click="onDone">It's done</button>
+  <div class="pg-focus">
+    <div class="header">
+      <span class="meta">Today</span>
+      <page-indicator :pages="tasks" @page-changed="goToTask" />
+      <div class="focus-notifs">
+        <notif-done
+          ref="notifDone"
+          :db="db"
+          :current-task="currentTask"
+          @cancel="onDoneCancel"
+        />
+        <notif-review @gotoreview="onGoToReview" />
+      </div>
     </div>
-    <div class="focus-notifs">
-      <notif-done
-        ref="notifDone"
-        :db="db"
-        :current-task="currentTask"
-        @cancel="onDoneCancel"
-      />
-      <notif-review @gotoreview="onGoToReview" />
-      <page-indicator :pages="tasks" :current="taskindex" @page-changed="goToTask" />
+    <div class="centered pb5">
+      <h1>{{ currentTask.name }}</h1>
+      <button class="btn btn-secondary btn-next" @click="onDone">It's done</button>
     </div>
     <div class="arrow-container">
       <div class="arrow" @click.prevent="skipToPrev">

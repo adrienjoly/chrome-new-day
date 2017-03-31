@@ -1,45 +1,28 @@
-<style>
-  .duration-picker-header {
-    font-size: 14px;
-    margin-bottom: 0;
-  }
-  .duration-picker .modal-body {
-    margin-top: 0;
-  }
-  .duration-picker-task-name {
-    margin-top: 10px;
-    font-size: 18px;
-    margin-bottom: 30px;
-  }
-  .duration-buttons input {
-    color: orange;
-    border: 1px solid orange;
-    padding: 5px;
-    width: 70px;
-    margin: 5px;
-    background-color: white;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  .duration-buttons input:hover {
-    background-color: orange;
-    color: white;
-  }
+<style lang="scss">
+
+  @import "styles/variables.scss";
+  @import "styles/basics.scss";
+  @import "styles/buttons.scss";
+
+  // .duration-picker .modal-body {}
+  // .duration-picker-task-name {}
+  // .duration-buttons input {}
+
 </style>
 
 <template>
   <modal class="duration-picker" @close="close">
-    <p class="duration-picker-header" slot="header">Please estimate</p>
-    <div class="duration-picker-body" slot="body">
-      <p class="duration-picker-task-name">{{ taskName }}</p>
+    <p class="meta" slot="header">How much do you think you need?</p>
+    <div class="text-center" slot="body">
+      <p class="font-medium pb4">{{ taskName }}</p>
       <form v-on:submit.prevent="setDuration" class="duration-buttons">
-        <input type="button" value="≤ 15 mn" data-minutes="15" @click="setDuration">
-        <input type="button" value="30 mn" data-minutes="30" @click="setDuration">
-        <input type="button" value="1 hour" data-minutes="60" @click="setDuration">
-        <input type="button" value="2 hours" data-minutes="120" @click="setDuration">
-        <input type="button" value="3 hours" data-minutes="180" @click="setDuration">
-        <input type="button" value="4 hours" data-minutes="240" @click="setDuration">
-        <input type="button" value="8 hours" data-minutes="480" @click="setDuration">
+        <input class="btn btn-outline m1" type="button" value="≤ 15 min" data-minutes="15" @click="setDuration">
+        <input class="btn btn-outline m1" type="button" value="30 min" data-minutes="30" @click="setDuration">
+        <input class="btn btn-outline m1" type="button" value="1 hour" data-minutes="60" @click="setDuration">
+        <input class="btn btn-outline m1" type="button" value="2 hours" data-minutes="120" @click="setDuration">
+        <input class="btn btn-outline m1" type="button" value="3 hours" data-minutes="180" @click="setDuration">
+        <input class="btn btn-outline m1" type="button" value="4 hours" data-minutes="240" @click="setDuration">
+        <input class="btn btn-outline m1" type="button" value="8 hours" data-minutes="480" @click="setDuration">
       </form>
     </div>
     <div slot="footer"></div>

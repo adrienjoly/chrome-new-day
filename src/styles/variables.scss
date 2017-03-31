@@ -20,6 +20,7 @@ $space: (
   .pl#{$key}        { padding-left:   map-get($space, $key);  }
   .pw#{$key}        { padding-left:   map-get($space, $key); padding-right:  map-get($space, $key);  }
   .ph#{$key}        { padding-top:    map-get($space, $key); padding-bottom: map-get($space, $key);  }
+  .p#{$key}         { padding:        map-get($space, $key);  }
 
   .mt#{$key}        { margin-top:    map-get($space, $key);  }
   .mr#{$key}        { margin-right:  map-get($space, $key);  }
@@ -27,6 +28,7 @@ $space: (
   .ml#{$key}        { margin-left:   map-get($space, $key);  }
   .mw#{$key}        { margin-left:   map-get($space, $key); margin-right:  map-get($space, $key);  }
   .mh#{$key}        { margin-top:    map-get($space, $key); margin-bottom: map-get($space, $key);  }
+  .m#{$key}         { margin:        map-get($space, $key);  }
 }
 
 /* Colors

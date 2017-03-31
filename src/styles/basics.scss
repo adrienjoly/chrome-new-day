@@ -8,10 +8,23 @@ html {
 
 body {
   font-family:  $font;
+  @extend       .font-regular;
   position:     relative;
   height:       100%;
   padding:      0;
   margin:       0;
+}
+
+.main-wrapper {
+  width:      100%;
+  max-width:  520px;
+  margin:     0 auto;
+  padding:    space(6) space(3);
+}
+
+.head-wrapper {
+  text-align: center;
+  padding-bottom: space(6);
 }
 
 h1, h2, h3, h4, h5, h6, p {
@@ -26,6 +39,7 @@ h1 {
 h2 {
   @extend .font-regular;
   color: color(gray,medium);
+  margin: space(1) 0;
 }
 
 h3 {
@@ -33,7 +47,25 @@ h3 {
 }
 
 p {
-  @extend .font-regular;
   color: color(gray,dark);
+}
+
+p.meta,
+span.meta {
+  color: color(gray,medium);
+}
+
+.link {
+  cursor: pointer;
+  color: color(orange, medium);
+  font-weight: 400;
+  padding: 0 space(1);
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.text-center {
+  text-align: center;
 }
 

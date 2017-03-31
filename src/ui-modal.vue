@@ -1,40 +1,47 @@
-<style>
+<style lang="scss">
+  
+  @import "styles/variables.scss";
+  @import "styles/basics.scss";
+  @import "styles/buttons.scss";
+
   .modal-mask {
-    position: fixed;
-    z-index: 9998;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, .5);
-    display: table;
-    transition: opacity .3s ease;
+    position:           fixed;
+    z-index:            9998;
+    top:                0;
+    left:               0;
+    width:              100%;
+    height:             100%;
+    background-color:   rgba(0, 0, 0, .5);
+    display:            table;
+    transition:         opacity .3s ease;
   }
 
   .modal-wrapper {
-    display: table-cell;
-    vertical-align: middle;
+    display:            table-cell;
+    vertical-align:     middle;
+    padding:            space(3);
   }
 
   .modal-container {
-    overflow: auto;
-    width: 300px;
-    margin: 0px auto;
-    padding: 20px 30px;
-    background-color: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-    transition: all .3s ease;
-    font-family: Helvetica, Arial, sans-serif;
+    overflow:           auto;
+    width:              100%;
+    max-width:          600px;
+    margin:             0px auto;
+    padding:            space(4);
+    background-color:   white;
+    border-radius:      $radius-small;
+    box-shadow:         0 2px 8px rgba(0, 0, 0, .33);
+    transition:         all .3s ease;
   }
 
-  .modal-header h3 {
-    margin-top: 0;
-    color: #42b983;
+  .modal-header {
+    padding-bottom:     space(3);
+    border-bottom:      1px solid color(gray,pale);
+    margin-bottom:     space(4);
   }
 
   .modal-body {
-    margin: 20px 0;
+    
   }
 
   .modal-default-button {

@@ -1,16 +1,26 @@
+<style lang="scss">
+
+  .notif-done {
+    // display: block;
+    text-align: center;
+    // width: 100%;
+  }
+
+</style>
+
 <template>
   <div class="notif-done">
-    <p v-if="visible">
-      Well done! 🎉 continue to stay focused
-      <a @click.prevent="cancel">Undo</a>
-      <a @click.prevent="clear">Close</a>
+    <p class="meta" v-if="visible">
+      <span class="pw2">Well done! 🎉 continue to stay focused ✌️</span>
+      <a class="link" @click.prevent="cancel">Undo</a>
+      <a class="link" @click.prevent="clear">Close</a>
     </p>
   </div>
 </template>
 
 <script>
   const DB_KEY = 'notifDoneTask'
-  const DURATION = 4 * 1000 // notif will disappear after 4 seconds
+  const DURATION = 5 * 1000 // notif will disappear after 5 seconds
   function reset(db) {
     db.setData(DB_KEY, null, () => {})
   }
