@@ -14,6 +14,18 @@ body {
   margin:       0;
 }
 
+.main-wrapper {
+  width:      100%;
+  max-width:  520px;
+  margin:     0 auto;
+  padding:    space(6) space(3);
+}
+
+.head-wrapper {
+  text-align: center;
+  padding-bottom: space(6);
+}
+
 h1, h2, h3, h4, h5, h6, p {
   margin: 0;
   padding: 0;
@@ -26,6 +38,7 @@ h1 {
 h2 {
   @extend .font-regular;
   color: color(gray,medium);
+  margin: space(1) 0;
 }
 
 h3 {

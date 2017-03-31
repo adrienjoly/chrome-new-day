@@ -4,146 +4,126 @@
   @import "styles/basics.scss";
   @import "styles/buttons.scss";
   
-  .pg-plan {
-    width:      100%;
-    max-width:  520px;
-    margin:     0 auto;
-    padding:    space(6) space(3);
-  }
-
-  .heading {
-    text-align: center;
-    padding-bottom: space(6);
-    h2 {
-      padding-top: space(1);
-    }
-  }
-
   .plan-tasks {
-    padding:    space(3);
-    margin:     0 0 space(5);
-    text-align: left;
-    list-style: none;
+    padding:            space(3);
+    margin:             0 0 space(5);
+    text-align:         left;
+    list-style:         none;
   }
 
-  .plan-tasks div li:first-child .task {
-      border-top: 1px solid color(gray,pale);
+  .plan-tasks li {
+    position:           relative;
+    display:            block;
+    padding-left:       space(5);
+    padding-right:      space(5);
+    width:              100%;
+    
+    &:first-child {
+      .task {           border-top: 1px solid color(gray,pale); }
+    }
+
+    &:hover {
+      cursor:           pointer;
+      .task-estimate,
+      .task-duration {  opacity: 1; }
+      .task-delete {    display: block; }
+    }
   }
 
   .task {
-    position: relative;
-    display: block;
-    border-bottom: 1px solid color(gray,pale);
-    padding: space(2) 0;
+    position:           relative;
+    display:            block;
+    border-bottom:      1px solid color(gray,pale);
+    padding:            space(2) 0;
 
     .task-name {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      display: block;
-      @extend .font-regular;
-      padding-right: 80px;
-      width: 100%;
+      @extend           .font-regular;
+      overflow:         hidden;
+      white-space:      nowrap;
+      text-overflow:    ellipsis;
+      display:          block;
+      padding-right:    80px;
+      width:            100%;
     }
 
-    .task-estimate {
-      opacity: 0;
-    }
-    .task-estimate,
+    .task-estimate, 
     .task-duration {
-      position: absolute;
-      display: block;
-      right: 0;
-      top: 5px;
-      text-align: center;
-      @extend .font-small;
-      width: 70px;
-      padding: space(1) 0;
-      color: color(gray,medium);
-      border-radius: $radius-small;
+      @extend           .font-small;
+      display:          block;
+      position:         absolute;
+      right:            0;
+      top:              space(1);
+      text-align:       center;
+      width:            70px;
+      padding:          space(1) 0;
+      color:            color(gray,medium);
+      border-radius:    $radius-small;
       &:hover {
         background-color: color(gray,pale);
-        color: color(gray,dark);
-        cursor: pointer;
+        color:            color(gray,dark);
+        cursor:           pointer;
       }
     }
 
-  }
+    .task-estimate {  opacity: 0; }
 
-  .plan-tasks li:hover {
-    cursor: pointer;
-    .task-estimate,
+  }
+ 
+  .task.task-entry {
+    border-bottom:        1px solid white;
+    &:hover {             border-bottom: 1px solid color(gray,pale); }
+    .task-name {
+      border:             none;
+      outline:            none;
+      &:hover {           color: color(gray,dark); }
+    }
     .task-duration {
-      opacity: 1;
-    }
-    .task-delete {
-      display: block;
+      display:            none;
     }
   }
-  .plan-tasks li {
-    position: relative;
-    display: block;
-    padding-left: space(5);
-    padding-right: space(5);
-    width: 100%;
 
-    .task-number {
-      position: absolute;
-      display: block;
-      left: 0;
-      text-align: right;
-      width: space(4);
-      margin: space(2) 0;
-      color: color(gray,medium);
-    }
+  .task-number {
+    position:               absolute;
+    display:                block;
+    left:                   0;
+    text-align:             right;
+    width:                  space(4);
+    margin:                 space(2) 0;
+    color:                  color(gray,medium);
+  }
 
-    .task-delete {
-      display: none;
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 30px;
-      text-align: center;
-      cursor: pointer;
-      font-size: 20px;
-      line-height: 30px;
-      color: color(gray,medium);
-      margin: 5px;
-      border-radius: 50%;
-      &:hover { 
-        color: black; 
-        background-color: color(gray,pale);
-      }
-    }
-    
-    .task.task-entry {
-      border-bottom: none;
-      .task-name {
-        border: none;
-        outline: none;
-        &:hover {
-          color: color(gray,dark);
-        }
-      }
-      .task-duration {
-        display: none;
-      }
+  .task-delete {
+    position:               absolute;
+    display:                none;
+    top:                    0;
+    right:                  0;
+    width:                  30px;
+    text-align:             center;
+    cursor:                 pointer;
+    font-size:              20px;
+    line-height:            30px;
+    color:                  color(gray,medium);
+    margin:                 space(1);
+    border-radius:          50%;
+    &:hover { 
+      color:                black; 
+      background-color:     color(gray,pale);
     }
   }
 
 </style>
 
 <template>
-  <div class="pg-plan">
+  <div class="main-wrapper">
     <duration-picker
       v-if="askDurationFor"
       :taskName="askDurationFor"
       @pick="pickDuration"
       @close="askDurationFor = null"
     ></duration-picker>
-    <div class="heading">
+    <div class="head-wrapper">
       <h1>{{ today }}</h1>
-      <h2 class="">Today is a New Day. What's your plan ?</h2>
+      <h2>Today is a New Day. What's your plan ?</h2>
     </div>
     <ol class="plan-tasks">
       <draggable v-model="tasks" @end="onDragEnd">
