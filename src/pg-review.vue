@@ -73,7 +73,7 @@
     },
     methods: {
       endOfDay() {
-        this.db.setData('relax', { until: tomorrow() }, () => {
+        this.db.setData('relax', { until: tomorrow().getTime() }, () => {
           this.db.setData('mood', null, () => {
             this.db.setData('tasks', [], () => { // clear all tasks
               this.goToNextTask() // will lead to the /relax page
