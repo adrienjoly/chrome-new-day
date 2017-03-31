@@ -1,6 +1,12 @@
-<style>
+<style lang="scss">
+
+  @import "styles/variables.scss";
+  @import "styles/basics.scss";
+  @import "styles/buttons.scss";
+
   .pg-focus h1 {
-    font-size: 64px;
+    @extend .font-large;
+    padding: space(3) 0; 
   }
   .focus-notifs {
     position: absolute;
@@ -35,10 +41,10 @@
 </style>
 
 <template>
-  <div class="pg-focus centered">
+  <div class="pg-focus">
     <div class="centered">
       <h1>{{ task.name }}</h1>
-      <button class="button secondary btn-next" @click="onDone">It's done</button>
+      <button class="btn btn-secondary btn-next" @click="onDone">It's done</button>
     </div>
     <div class="focus-notifs">
       <notif-done

@@ -41,6 +41,7 @@
   
 }
 
-.button.secondary {
-  background-color: #32C9B3;
+.button.secondary,
+.btn.btn-secondary {
+  background-color: color(green,medium);
 }
