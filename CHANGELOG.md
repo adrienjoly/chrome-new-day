@@ -1,3 +1,8 @@
+== 0.2.1 finalized review page
+ * feature: see performance on each task, visually
+ * ui: better styling overall
+ * bug fix: "relax" screen was stuck
+
 == 0.2.0 relax page and styling of planning page
  * feature: a new "relax" page, when your day is over
  * ui: better styling on the planning page
