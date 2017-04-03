@@ -1,4 +1,12 @@
-<style scoped>
+<style lang="scss" scoped>
+  /* caution:
+     the "scoped" attribute means that all the following rules are auto-prefixed
+     to apply only to this component.
+  */
+  @import "styles/variables.scss";
+  @import "styles/basics.scss";
+  @import "styles/buttons.scss";
+  
   .performance-bar {
     overflow: auto;
   }
@@ -6,6 +14,8 @@
     position: relative;
     width: 100%;
     height: 8px;
+    border-radius: 5px;
+    overflow: hidden;
   }
   [data-mode="over"] .bar {
     background-color: red;
@@ -15,13 +25,13 @@
   }
   .done {
     height: 100%;
-    background-color: green;
+    background-color: color(green,medium);
   }
   .estimated {
     float: left;
   }
   [data-mode="over"] .estimated {
-    color: green;
+    color: color(green,medium);
   }
   [data-mode="under"] .estimated {
     color: gray;
@@ -33,9 +43,10 @@
     color: red;
   }
   [data-mode="under"] .difference {
-    color: green;
+    color: color(green,medium);
   }
   p {
+    margin-top: 16px;
     font-size: 12px;
   }
 </style>
