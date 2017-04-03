@@ -25,6 +25,7 @@
       margin:             space(4) 0;
       text-align:         left;
       list-style:         none;
+      border-radius: 5px;
     }
     li {
       position: relative;
@@ -74,6 +75,29 @@
     li[data-undone] .task-duration {
       display: none;
     }
+    .review-box {
+      position: relative;
+      p {
+        text-align: left;
+        margin-bottom: 12px;
+      }
+      textarea {
+        display: block;
+        resize: none;
+        border: 1px solid lightgray;
+        background-color: #fafafa;
+        padding: space(2);
+        font-size: 15px;
+        height: 160px;
+        width: 100%;
+        border-radius: 5px;
+      }
+      button {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+      }
+    }
   }
 </style>
 
@@ -98,10 +122,15 @@
           <!-- {{ renderElapsed(task) }} / {{ task.minutes }} mn-->
           <span class="task-duration">{{ renderDiff(task) }}</span>
         </li>
-
       </ol>
-
-      <button class="button" @click="endOfDay">Let's relax</button>
+    </div>
+    <div class="review-box">
+      <p>What do you think about that?</p>
+      <textarea
+        v-model:value="reviewText"
+        placeholder="Type something..."
+      />
+      <button class="button" @click="endOfDay">Submit</button>
     </div>
   </div>
 </template>
@@ -110,10 +139,6 @@
   import common from './common.js'
   import PerformanceBar from './ui-performance-bar.vue'
   import Vector from './ui-vector.vue'
-
-  const formatDate = common.formatDate
-  const renderMinutes = common.renderMinutes
-  const sumElapsedSecondsWithBreaks = common.sumElapsedSecondsWithBreaks
 
   const RESET_HOUR = 5 // a new day starts at 5 am
 
@@ -141,16 +166,19 @@
       'goToNextTask',
     ],
     data: () => ({
+      reviewText: '',
       icons: {
         done: require('./svg/icon-done.svg'),
         undone: require('./svg/icon-undone.svg'),
       },
     }),
     computed: {
-      today: () => formatDate(new Date())
+      today: () => common.formatDate(new Date())
     },
     methods: {
-      endOfDay() {
+      endOfDay() { // when: click on "submit" button
+        this.analytics.review.comment(this.reviewText)
+        this.db.setData('reasonForReview', null, () => {})
         this.db.setData('relax', { until: tomorrow().getTime() }, () => {
           this.db.setData('mood', null, () => {
             this.db.setData('tasks', [], () => { // clear all tasks
@@ -185,9 +213,9 @@
       this.db.fetchData('reasonForReview', ({key, value}) => {
         // transfer reasonForReview from local storage to back-end
         const reasonForReview = value || this.analytics.review.startReason.FINISHED
-        this.analytics.mood.start({
+        this.analytics.review.start({
           reason: reasonForReview,
-          totalTime: sumElapsedSecondsWithBreaks(this.tasks),
+          totalTime: common.sumElapsedSecondsWithBreaks(this.tasks),
           breaks: [], // TODO
           tasks: this.tasks.map((task) => ({
             id: task.uuid,
@@ -197,15 +225,7 @@
             timeSpent: task.elapsedMillisecs / 1000,
           })),
         })
-        this.db.setData('reasonForReview', null, () => {})
       })
     },
   }
-
-  /*
-  // TODO: track review analytic events:
-    startReason()
-    start()
-    comment()
-  */
 </script>

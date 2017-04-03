@@ -51,10 +51,12 @@
 
 <script>
   import Vector from './ui-vector.vue';
+  import common from './common.js'
 
   export default {
     props: [
       'db',
+      'tasks',
       'analytics',
       'goToNextTask',
     ],
@@ -69,6 +71,24 @@
     }),
     components: {
       'vector': Vector
+    },
+    mounted() {
+      this.db.fetchData('reasonForReview', ({key, value}) => {
+        // transfer reasonForReview from local storage to back-end
+        const reasonForReview = value || this.analytics.review.startReason.FINISHED
+        this.analytics.mood.start({
+          reason: reasonForReview,
+          totalTime: common.sumElapsedSecondsWithBreaks(this.tasks),
+          breaks: [], // TODO
+          tasks: this.tasks.map((task) => ({
+            id: task.uuid,
+            name: task.name,
+            estimation: task.minutes * 60,
+            done: task.done,
+            timeSpent: task.elapsedMillisecs / 1000,
+          })),
+        })
+      })
     },
     methods: {
       pickMood: function(mood) {
