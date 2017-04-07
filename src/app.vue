@@ -87,6 +87,8 @@
           const now = new Date()
           const startDate = new Date(value.startDate || 'invalid date')
 
+          var isMoodPicked = value.mood !== null && value.mood !== undefined
+          
           //console.log('startDate', startDate)
           //console.log('tomorrow', common.getNextDay(startDate))
 
@@ -104,7 +106,7 @@
             }
             if (!value.relax) {
               this.db.setData('reasonForReview', this.analytics.review.startReason.OVERTIME, () => {
-                callback(null, value.mood ? '/review' : '/mood')
+                callback(null, isMoodPicked ? '/review' : '/mood')
               })
               return
             }
@@ -117,7 +119,7 @@
           const allTasksDone = this.tasks.length > 0 && this.tasks.filter((t) => !t.done).length === 0
           if (value.relax) {
             callback(null, '/relax')
-          } else if (value.mood) {
+          } else if (isMoodPicked) {
             callback(null, '/review')
           } else if (allTasksDone) {
             callback(null, '/mood')
