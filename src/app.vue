@@ -42,6 +42,7 @@
   import Analytics from './analytics'
 
   const HOUR_END_OF_DAY = 21 // hour of the day when review screen is to be shown systematically
+  // also look for constants: HOUR_PROPOSE_END_OF_DAY (ui-notif-review.vue), RESET_HOUR (pg-review.vue)
 
   const db = window.chrome && window.chrome.storage ? dbChrome : dbFake
 
