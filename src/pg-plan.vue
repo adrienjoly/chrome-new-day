@@ -218,6 +218,7 @@
         this.analytics.plan.removeTask(task.uuid)
       },
       onAddTask(evt) {
+        if (this.$refs.input.value.trim() === '') return;
         const task = {
           uuid: common.uuid(),
           name: this.$refs.input.value,
