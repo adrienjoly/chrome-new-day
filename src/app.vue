@@ -84,37 +84,43 @@
     },
     methods: {
       _getRoute(callback){
-        if (new Date().getHours() >= HOUR_END_OF_DAY) {
-          if (this.currentTask) {
-            this.setCurrentTask(null)
+        this.db.fetchData(null, ({ key, value }) => {
+          value = value || {}
+          const now = new Date()
+
+          if (now > common.getNextDay(new Date(value.startDate))) {
+            this.db.clear() // resets the state of the app
+            callback(null, '/plan')
+            return
           }
-          this.db.setData('reasonForReview', this.analytics.review.startReason.OVERTIME, () => {
-            callback(null, '/review')
-          })
-        } else {
-          this.db.fetchData(null, ({ key, value }) => {
-            value = value || {}
-            if (new Date() > common.getNextDay(new Date(value.startDate))) {
-              this.db.clear() // resets the state of the app
-              callback(null, '/plan')
+
+          if (now.getHours() >= HOUR_END_OF_DAY) {
+            if (this.currentTask) {
+              this.setCurrentTask(null)
+            }
+            if (!value.relax) {
+              this.db.setData('reasonForReview', this.analytics.review.startReason.OVERTIME, () => {
+                callback(null, '/review') // TODO: ...OR RELAX
+              })
               return
             }
-            // if user is supposed to be focusing on a task => redirect to focus page
-            const currentTaskIndex = this.tasks.findIndex((t) => t.name === (value.currentTask || {}).name)
-            const allTasksDone = this.tasks.length > 0 && this.tasks.filter((t) => !t.done).length === 0
-            if (currentTaskIndex !== -1) {
-              callback(null, '/focus/' + currentTaskIndex)
-            } else if (value.currentTask && value.currentTask.isBreak) {
-              callback(null, '/break')
-            } else if (value.relax) {
-              callback(null, '/relax')
-            } else if (allTasksDone) {
-              callback(null, value.mood === null || value.mood === undefined ? '/mood' : '/review')
-            } else {
-              callback(null, '/plan')
-            }
-          })
-        }
+          }
+
+          // if user is supposed to be focusing on a task => redirect to focus page
+          const currentTaskIndex = this.tasks.findIndex((t) => t.name === (value.currentTask || {}).name)
+          const allTasksDone = this.tasks.length > 0 && this.tasks.filter((t) => !t.done).length === 0
+          if (value.relax) {
+            callback(null, '/relax')
+          } else if (currentTaskIndex !== -1) {
+            callback(null, '/focus/' + currentTaskIndex)
+          } else if (value.currentTask && value.currentTask.isBreak) {
+            callback(null, '/break')
+          } else if (allTasksDone) {
+            callback(null, value.mood === null || value.mood === undefined ? '/mood' : '/review')
+          } else {
+            callback(null, '/plan')
+          }
+        })
       },
       _route() {
         console.info('[app] _route() ...')
