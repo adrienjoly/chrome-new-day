@@ -13,5 +13,5 @@
   "permissions": [
     "storage"
   ],
-  "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://www.google-analytics.com; object-src 'self'"
+  "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://www.googleapis.com https://www.google-analytics.com; object-src 'self'"
 }
