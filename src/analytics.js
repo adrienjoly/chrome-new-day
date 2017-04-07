@@ -12,15 +12,6 @@
 
 // MP
 import mixpanel from 'mixpanel-browser';
-//import * as firebase from "firebase";
-import * as firebase from "firebase/app";
-import 'firebase/database';
-
-var config = {
-  apiKey: "AIzaSyANNAaxb84uIvvPW3e7TxAi23r4QJWRtQk",
-  databaseURL: "https://newday-56d87.firebaseio.com/"
-};
-firebase.initializeApp(config);
 
 mixpanel.init("9862f785ad64848289194f43cafd0016");
 
@@ -32,6 +23,27 @@ mixpanel.init("9862f785ad64848289194f43cafd0016");
 
 ga('create', 'UA-96103800-1', 'auto');
 
+function post(url, body, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    console.log(xhr);
+    if (xhr.readyState === 4 && callback) {
+      callback(xhr.responseText);
+    }
+  };
+  xhr.open("POST", url, true);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.send(body);
+}
+
+function uploadReview(uid, text) {
+  const url = 'https://script.google.com/macros/s/AKfycbw-5kk3aRK67gh7Xyi94TP1iaJnwnUHeehMKjnD9IcZZkZ35jI/exec';
+  const body = "mixpanel-userId=" + encodeURIComponent(uid) + "&review=" + encodeURIComponent(text);
+  post(url, body, function(res) {
+    console.log('[App] Review Posted: ', res)
+  });
+}
+
 // --- COMMON
 // when this module is loaded, this means the page was loaded
 //function pageLoaded() {}
@@ -42,20 +54,12 @@ window.addEventListener('beforeunload', pageUnloaded);
 
 // --- HELPERS
 
-function firebaseStore(type, name, properties, privateProperties) {
-  var uid = mixpanel.get_distinct_id();
-  var fbObj = Object.assign({}, properties || {}, privateProperties || {}, { type: type, name: name, uid: uid, time: Date() });
-  firebase.database().ref('events').push(fbObj);
-}
-
 function event(name, properties, privateProperties) {
   ga('send', {
     hitType: 'event',
     eventCategory: 'App',
     eventAction: name
   });
-
-  firebaseStore('event', name, properties, privateProperties);
 
   // mixpanel may mutate the properties, so put him at the end
   mixpanel.track(name, properties);
@@ -66,8 +70,6 @@ function page(name, properties, privateProperties) {
     hitType: 'pageview',
     page: '/' + name
   });
-
-  firebaseStore('page', name, properties, privateProperties);
 
   // mixpanel may mutate the properties, so put him at the end
   mixpanel.track(name, properties);
@@ -206,6 +208,7 @@ function reviewStart() {
 
 // comment: String
 function reviewComment(comment) {
+  uploadReview(mixpanel.get_distinct_id(), comment);
   event('review-comment', {}, { comment: comment });
 }
 
