@@ -1,8 +1,14 @@
+<style lang="scss">
+  .notif-review {
+    text-align: center;
+  }
+</style>
+
 <template>
   <div class="notif-review">
-    <p v-if="displayReviewLink">
-      Are you done for today?
-      <a @click.prevent="$emit('gotoreview')">Let's review!</a>
+    <p class="meta" v-if="displayReviewLink">
+      <span class="pw2">Are you done for today?</span>
+      <a class="link" @click.prevent="$emit('gotoreview')">Let's review!</a>
     </p>
   </div>
 </template>
