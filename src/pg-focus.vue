@@ -49,11 +49,24 @@
     fill: color(gray,light);
   }
 
+  .break {
+    float: right;
+    border: 1px solid #ddd;
+    border-radius: calc(50%);
+    width: 50px;
+    height: 50px;
+    padding: 20px;
+    fill: color(gray,light);
+  }
+
 </style>
 
 <template>
   <div class="pg-focus">
     <div class="header">
+      <div class="break" @click="startBreak">
+        <vector :src="pauseBtn"/>
+      </div>
       <span class="meta">Today</span>
       <page-indicator :pages="tasks" @page-changed="goToTask" />
       <div class="focus-notifs">
@@ -100,6 +113,7 @@
       'tasks', // db subscription
       'db',
       'analytics',
+      'setBreak',
       'setCurrentTask',
       'goToNextTask',
       'updateTaskByName',
@@ -107,8 +121,12 @@
     data: () => ({
       leftArrow: require('./svg/arrow-back.svg'),
       rightArrow: require('./svg/arrow-forward.svg'),
+      pauseBtn: require('./svg/icon-pause.svg'),
     }),
     methods: {
+      startBreak() {
+        this.setBreak(true)
+      },
       skipToNext() {
         const index = (parseInt(this.taskindex) + 1) % this.tasks.length
         this.analytics.focus.moveForward({

@@ -30,6 +30,7 @@
       :currentTask="currentTask"
       :analytics="analytics"
       :setCurrentTask="setCurrentTask"
+      :setBreak="setBreak"
       :updateTaskByName="updateTaskByName"
       :goToNextTask="goToNextTask"
     ></router-view>
@@ -82,6 +83,9 @@
     methods: {
       _getRoute(callback){
         if (new Date().getHours() >= HOUR_END_OF_DAY) {
+          if (this.currentTask) {
+            this.setCurrentTask(null)
+          }
           this.db.setData('reasonForReview', this.analytics.review.startReason.OVERTIME, () => {
             callback(null, '/review')
           })
@@ -93,6 +97,8 @@
             const allTasksDone = this.tasks.length > 0 && this.tasks.filter((t) => !t.done).length === 0
             if (currentTaskIndex !== -1) {
               callback(null, '/focus/' + currentTaskIndex)
+            } else if (value.currentTask && value.currentTask.isBreak) {
+              callback(null, '/break')
             } else if (value.relax) {
               callback(null, '/relax')
             } else if (allTasksDone) {
@@ -115,28 +121,54 @@
         this.db.setData('tasks', updatedTasks, callback || (() =>
           console.log('[app] updated elapsed time of previous task')))
       },
+      setBreak(started, callback) {
+        callback = callback || this._route
+        console.log('[app] set break:', started)
+        if (started === !!this.currentTask.isBreak) {
+          callback()
+        } else {
+          let nextTask
+          if (started) {
+            const breakTask = {
+              isBreak: true,
+              pendingTask: null,
+            }
+            breakTask.pendingTask = this._updateTaskElapsedTime(this.currentTask)
+            nextTask = breakTask
+          } else { // this.currentTask is a breakTask
+            nextTask = this._updateTaskStartTime(this.currentTask.pendingTask)
+          }
+          this.db.setData('currentTask', nextTask, callback || (() =>
+            console.log('[app] updated currentTask')))
+        }
+      },
+      _updateTaskElapsedTime(task) {
+        // to be called when ending focus on task
+        if (!task) return null;
+        const now = new Date().getTime()
+        const newMillisecs = now - task.lastStart
+        let diff = {
+          elapsedMillisecs: (task.elapsedMillisecs || 0) + newMillisecs,
+        }
+        this.updateTaskByName(task.name, diff)
+        return Object.assign({}, task, diff)
+      },
+      _updateTaskStartTime(task) {
+        // to be called when starting focus on task
+        if (!task) return null;
+        const now = new Date().getTime()
+        let diff = { lastStart: now }
+        this.updateTaskByName(task.name, diff)
+        return Object.assign({}, task, diff)
+      },
       setCurrentTask(task, callback) {
         callback = callback || this._route
         const taskName = (task || {}).name
         console.log('[app] set current task:', taskName)
-        const currentTask = this.currentTask
-        if (taskName != (currentTask || {}).name) {
-          const tasks = this.tasks || []
-          const now = new Date().getTime()
-          if (currentTask) {
-            const newMillisecs = now - currentTask.lastStart
-            this.updateTaskByName(currentTask.name, (task) => ({
-              elapsedMillisecs: (task.elapsedMillisecs || 0) + newMillisecs,
-            }))
-          }
-          if (task) {
-            task.lastStart = now
-          }
-          this.db.setData('currentTask', task || null, callback || (() =>
-            console.log('[app] updated currentTask')))
-        } else {
-          callback()
-        }
+        this._updateTaskElapsedTime(this.currentTask)
+        task = this._updateTaskStartTime(task)
+        this.db.setData('currentTask', task, callback || (() =>
+          console.log('[app] updated currentTask')))
       },
       goToNextTask() {
         const nextTask = this.tasks.find((task) => !task.done)
