@@ -34,6 +34,7 @@
       :updateTaskByName="updateTaskByName"
       :goToNextTask="goToNextTask"
       :startDay="startDay"
+      @pickedMood="pickedMood"
     ></router-view>
   </div>
 </template>
@@ -43,9 +44,6 @@
   import dbFake from './db-fake.js'
   import Analytics from './analytics'
   import common from './common.js'
-
-  const HOUR_END_OF_DAY = 21 // hour of the day when review screen is to be shown systematically
-  // also look for constants: HOUR_PROPOSE_END_OF_DAY (ui-notif-review.vue), RESET_HOUR (pg-review.vue)
 
   const db = window.chrome && window.chrome.storage ? dbChrome : dbFake
 
@@ -87,20 +85,21 @@
         this.db.fetchData(null, ({ key, value }) => {
           value = value || {}
           const now = new Date()
+          const startDate = new Date(value.startDate)
 
-          if (now > common.getNextDay(new Date(value.startDate))) {
+          if (value.startDate && now > common.getNextDay(startDate)) {
             this.db.clear() // resets the state of the app
             callback(null, '/plan')
             return
           }
 
-          if (now.getHours() >= HOUR_END_OF_DAY) {
+          if (value.startDate && now > common.getEndHour(startDate)) {
             if (this.currentTask) {
               this.setCurrentTask(null)
             }
             if (!value.relax) {
               this.db.setData('reasonForReview', this.analytics.review.startReason.OVERTIME, () => {
-                callback(null, '/review') // TODO: ...OR RELAX
+                callback(null, value.mood ? '/review' : '/mood')
               })
               return
             }
@@ -111,12 +110,14 @@
           const allTasksDone = this.tasks.length > 0 && this.tasks.filter((t) => !t.done).length === 0
           if (value.relax) {
             callback(null, '/relax')
+          } else if (value.mood) {
+            callback(null, '/review')
+          } else if (allTasksDone) {
+            callback(null, '/mood')
           } else if (currentTaskIndex !== -1) {
             callback(null, '/focus/' + currentTaskIndex)
           } else if (value.currentTask && value.currentTask.isBreak) {
             callback(null, '/break')
-          } else if (allTasksDone) {
-            callback(null, value.mood === null || value.mood === undefined ? '/mood' : '/review')
           } else {
             callback(null, '/plan')
           }
@@ -182,6 +183,9 @@
         task = this._updateTaskStartTime(task)
         this.db.setData('currentTask', task, callback || (() =>
           console.log('[app] updated currentTask')))
+      },
+      pickedMood() {
+        this.setCurrentTask() // => should go to /review
       },
       goToNextTask() {
         const nextTask = this.tasks.find((task) => !task.done)

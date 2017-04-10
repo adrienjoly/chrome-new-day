@@ -58,7 +58,6 @@
       'db',
       'tasks',
       'analytics',
-      'goToNextTask',
     ],
     data: () => ({
       icons: [
@@ -95,7 +94,7 @@
         console.log("mood> " + mood);
         this.analytics.mood.rate(mood)
         this.db.setData('mood', mood, () => {
-          this.goToNextTask(); // will lead to /review
+          this.$emit('pickedMood')
         })
       }
     }

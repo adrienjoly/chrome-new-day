@@ -3,6 +3,10 @@ const monthNames = ["January", "February", "March", "April", "May", "June", "Jul
 
 const RESET_HOUR = 5 // a new day starts at 5 am
 
+const HOUR_END_OF_DAY = 21 // hour of the day when review screen is to be shown systematically
+// also look for constants: HOUR_PROPOSE_END_OF_DAY (ui-notif-review.vue)
+
+
 // database model (name of persisted variables):
 const KEYS = [
   'tasks',         // todays' tasks (array of task objects)
@@ -14,11 +18,20 @@ const KEYS = [
 ]
 
 const getNextDay = (date) => {
-  var d = date || new Date()
+  var d = date ? new Date(date) : new Date()
   if (d.getHours() >= RESET_HOUR) {
     d.setDate(d.getDate() + 1)
   }
   d.setHours(RESET_HOUR)
+  d.setMinutes(0)
+  d.setSeconds(0)
+  d.setMilliseconds(0)
+  return d
+}
+
+const getEndHour = (date) => {
+  var d = date ? new Date(date) : new Date()
+  d.setHours(HOUR_END_OF_DAY)
   d.setMinutes(0)
   d.setSeconds(0)
   d.setMilliseconds(0)
@@ -57,6 +70,7 @@ const sumElapsedSecondsWithBreaks = sumElapsedSecondsWithoutBreaks
 export default {
   KEYS,
   getNextDay,
+  getEndHour,
   uuid,
   formatDate,
   renderMinutes,
