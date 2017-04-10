@@ -243,6 +243,7 @@
         const task = {
           uuid: common.uuid(),
           name: taskName,
+          elapsedMillisecs: 0,
         }
         let newTaskList = this.tasks.slice()
         newTaskList.push(task)
