@@ -1,3 +1,8 @@
+== v1.0.0 release candidate
+ * feature: break / pause mode
+ * feature: simpler review screen
+ * bug fixes: navigation and time sums
+
 == 0.2.1 finalized review page
  * feature: see performance on each task, visually
  * ui: better styling overall
