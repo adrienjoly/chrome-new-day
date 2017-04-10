@@ -71,7 +71,7 @@
       <div class="break" @click="startBreak">
         <vector :src="pauseBtn"/>
       </div>
-      <span class="meta">Today</span>
+      <span class="meta">{{ today }}</span>
       <page-indicator :pages="tasks" :current="taskindex" @page-changed="goToTask" />
       <div class="focus-notifs">
         <notif-done
@@ -101,8 +101,11 @@
 <script>
   import NotifDone from './ui-notif-done.vue'
   import NotifReview from './ui-notif-review.vue'
-  import PageIndicator from './ui-page-indicator.vue';
-  import Vector from './ui-vector.vue';
+  import PageIndicator from './ui-page-indicator.vue'
+  import Vector from './ui-vector.vue'
+  import common from './common.js'
+
+  const formatDate = common.formatDate
 
   export default {
     components: {
@@ -134,6 +137,9 @@
           pb5: true,
           done: this.isDone 
         }
+      },
+      today() {
+        return formatDate(new Date())
       },
       isDone() {
         return !!this.currentTask.done
