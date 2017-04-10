@@ -61,6 +61,21 @@ const renderMinutesPrecise = (minutes) =>
   (minutes >= 60 ? parseInt(minutes / 60) + 'h ' : '')
   + (minutes % 60 ? parseInt(minutes % 60) + 'm' : '')
 
+function padTime(time) { 
+  let strTime = '' + time
+  if (strTime.length < 2) { strTime = '0' + strTime }
+  return strTime
+}
+
+function minutesCount(minutes) {
+  let remainder = parseInt(minutes % 60)
+  let spentAtLeastAnHour = parseInt(minutes / 60) > 0
+  let spentAtLeastAMinute = (remainder > 0)
+  return spentAtLeastAnHour || spentAtLeastAMinute ? remainder : 1
+}
+const renderMinutesStat = (minutes) =>
+  parseInt(minutes / 60) + ':' + padTime(minutesCount(minutes))
+
 const renderSeconds = (seconds) =>
   seconds > 60 ? renderMinutesPrecise(seconds / 60) : parseInt(seconds % 60) + 's'
 
@@ -79,6 +94,7 @@ export default {
   formatDate,
   renderMinutes,
   renderSeconds,
+  renderMinutesStat,
   sumElapsedSecondsWithoutBreaks,
   sumElapsedSecondsWithBreaks,
 }

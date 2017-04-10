@@ -127,7 +127,7 @@
       <div class="statistic-container">
         <div v-for="statistic in statistics" class="statistic">
           <div :class="statistic.style">{{ statistic.value }}</div>
-          <div>{{ statistic.name }}</div>
+          <div class="statistic-label">{{ statistic.name }}</div>
         </div>
       </div>
     </div>
@@ -147,6 +147,8 @@
 <script>
   import common from './common.js'
 
+  const renderMinutesStat = common.renderMinutesStat
+
   export default {
     props: [
       'db',
@@ -160,12 +162,23 @@
     computed: {
       today: () => common.formatDate(new Date()),
       statistics() {
+        let taskCount = this.tasks.length
+        let doneCount = this.tasks.filter((t) => t.done).length
+        let undoneCount = taskCount - doneCount
+        let timeSpent = this.tasks.reduce((s, t) => s + t.elapsedMillisecs, 0) / 1000 / 60
+        let timeEstimated = this.tasks.reduce((s, t) => s + t.minutes, 0)
+
+        let baseStyle = { 'statistic-value': true }
+        let doneStyle = Object.assign({}, baseStyle, { good: doneCount > undoneCount })
+        let undoneStyle = Object.assign({}, baseStyle, { good: undoneCount > doneCount })
+        let timeSpentStyle = Object.assign({}, baseStyle, { good: timeSpent < timeEstimated })
+        let timeUnspentStyle = Object.assign({}, baseStyle, { bad: timeEstimated < timeSpent })
+
         return [ 
-          { value: 3, name: 'tasks done', style: { good: true } }, 
-          { value: 1, name: 'tasks undone' }, 
-          { value: '4.50', name: 'time spent', style: { bad: true } },
-          { value: '5.50', name: 'time estimated' },
-          { value: '0.30', name: 'break time' },
+          { value: doneCount, name: 'tasks done', style: doneStyle }, 
+          { value: undoneCount, name: 'tasks undone', style: undoneStyle }, 
+          { value: renderMinutesStat(timeSpent), name: 'time spent', style: timeSpentStyle },
+          { value: renderMinutesStat(timeEstimated), name: 'time estimated', style: timeUnspentStyle }
         ]
       }
     },
