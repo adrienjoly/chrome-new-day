@@ -181,7 +181,7 @@
       },
       onGoToReview() {
         this.db.setData('reasonForReview', this.analytics.review.startReason.MANUALLY, () => {
-          this.$router.push('/mood') // TODO: do that in app.vue instead
+          this.setCurrentTask() // will lead to /mood
         })
       },
     }

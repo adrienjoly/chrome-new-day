@@ -86,12 +86,12 @@
           value = value || {}
           const now = new Date()
           const startDate = new Date(value.startDate || 'invalid date')
-
           var isMoodPicked = value.mood !== null && value.mood !== undefined
           
           //console.log('startDate', startDate)
           //console.log('tomorrow', common.getNextDay(startDate))
 
+          // a new day begins? => clear state data and plan the day
           if (value.startDate && now > common.getNextDay(startDate)) {
             this.db.clear() // resets the state of the app
             callback(null, '/plan')
@@ -100,29 +100,21 @@
 
           // console.log('getEndHour', common.getEndHour(startDate))
 
-          if (value.startDate && now > common.getEndHour(startDate)) {
-            if (this.currentTask) {
-              this.setCurrentTask(null)
-            }
-            if (!value.relax) {
-              this.db.setData('reasonForReview', this.analytics.review.startReason.OVERTIME, () => {
-                callback(null, isMoodPicked ? '/review' : '/mood')
-              })
-              return
-            }
+          // it's late, and you had planned your day earlier? => force user to review
+          if (value.startDate && now > common.getEndHour(startDate) && !value.relax) {
+            this.db.setData('reasonForReview', this.analytics.review.startReason.OVERTIME, () => {})
+            value.reasonForReview = this.analytics.review.startReason.OVERTIME // to use routing logic below
           }
 
-          // console.log('today')
-
-          // if user is supposed to be focusing on a task => redirect to focus page
           const currentTaskIndex = this.tasks.findIndex((t) => t.uuid === (value.currentTask || {}).uuid)
           const allTasksDone = this.tasks.length > 0 && this.tasks.filter((t) => !t.done).length === 0
+
           if (value.relax) {
             callback(null, '/relax')
-          } else if (isMoodPicked) {
-            callback(null, '/review')
-          } else if (allTasksDone) {
-            callback(null, '/mood')
+          } else if (value.reasonForReview || isMoodPicked || allTasksDone) {
+            this.setCurrentTask(null, () => {
+              callback(null, isMoodPicked ? '/review' : '/mood')
+            })
           } else if (currentTaskIndex !== -1) {
             callback(null, '/focus/' + currentTaskIndex)
           } else if (value.currentTask && value.currentTask.isBreak) {
