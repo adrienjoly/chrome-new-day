@@ -80,7 +80,6 @@
       },
       estimated() {
         return this.tasks.reduce((acc, task) => acc + task.minutes * 60, 0)
-        // TODO: don't take breaks into account
       },
       barPct() {
         return 100 * ( this.elapsed > this.estimated

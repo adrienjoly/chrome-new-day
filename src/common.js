@@ -82,7 +82,6 @@ const renderSeconds = (seconds) =>
 
 const sumElapsedSecondsWithoutBreaks = (tasks) =>
   tasks.reduce((acc, task) => acc + task.elapsedMillisecs / 1000, 0)
-  // TODO: don't take breaks into account
 
 const sumElapsedSecondsWithBreaks = sumElapsedSecondsWithoutBreaks
   // TODO: take breaks into account

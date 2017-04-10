@@ -30,7 +30,6 @@
 </template>
 
 <script>
-  // TODO: (styling) fix positionning/alignment of second line of buttons
   import Vue from 'vue'
   import modal from './ui-modal.vue'
 
