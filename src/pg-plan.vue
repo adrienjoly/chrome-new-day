@@ -150,7 +150,7 @@
         </span>
       </li>
     </ol>
-    <button class="button btn-outline btn-centered" @click="onStart">Start my day</button>
+    <button class="button btn-outline btn-centered" :disabled="cannotStart" @click="onStart">{{ startButtonText }}</button>
   </div>
 </template>
 
@@ -187,7 +187,26 @@
       this.analytics.plan.start()
     },
     computed: {
-      today: function() { return formatDate(new Date()); }
+      today: function() { return formatDate(new Date()); },
+      unestimatedTasks() {
+        return this.tasks.filter((task) => !task.minutes)
+      },
+      cannotStart() {
+        return this.tasks.length === 0
+      },
+      startButtonText() {
+        let remaining = this.unestimatedTasks.length
+        if (this.cannotStart) {
+          return "Add a task to continue";
+        }
+        if (remaining === 0) {
+          return "Start my day"
+        }
+        if (remaining === 1) {
+          return "1 task to estimate"
+        }
+        return remaining + " tasks to estimate"
+      }
     },
     methods: {
       renderMinutes,

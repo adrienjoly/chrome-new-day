@@ -49,3 +49,20 @@
     transform: scale(1.1);
   }
 }
+
+.button.btn-outline:disabled,
+.btn.btn-outline:disabled {
+  background-color: white;
+  color:               color(gray,light);
+  border-color:        color(gray,light);
+  &:active {
+    box-shadow: none;
+  }
+
+  &:hover {
+    transform: none;
+    background-color:    white;
+    color:               color(gray,light);
+    border-color:        color(gray,light);
+  }
+}
