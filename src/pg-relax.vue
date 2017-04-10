@@ -1,10 +1,10 @@
-<style lang="scss" scoped>
+<style lang="scss">
 
   @import "styles/variables.scss";
   @import "styles/basics.scss";
   @import "styles/buttons.scss";
 
-  .button-bar {
+  .pg-relax .button-bar {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -14,7 +14,7 @@
       fill: color(gray,medium);
     }
   }
-  .icon {
+  .pg-relax .icon {
     width: 92px;
     height: 92px;
     margin: 10px;
@@ -23,7 +23,7 @@
 </style>
 
 <template>
-  <div class="main-wrapper text-center">
+  <div class="pg-relax main-wrapper text-center">
     <h1>Just relax until tomorrow !</h1>
     <div class="button-bar">
       <vector class="icon" :src="icon"></vector>

@@ -4,7 +4,7 @@
   @import "styles/basics.scss";
   @import "styles/buttons.scss";
 
-  .button-bar {
+  .pg-mood .button-bar {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -12,7 +12,7 @@
     text-align: center;
   }
 
-  .icon-mood {
+  .pg-mood .icon-mood {
     cursor: pointer;
     display: inline-block;
     margin: space(4);
