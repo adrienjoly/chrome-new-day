@@ -139,7 +139,7 @@
 
         let baseStyle = { 'statistic-value': true }
         let doneStyle = Object.assign({}, baseStyle, { good: doneCount > undoneCount })
-        let undoneStyle = Object.assign({}, baseStyle, { good: undoneCount > doneCount })
+        let undoneStyle = Object.assign({}, baseStyle, { bad: undoneCount > doneCount })
         let timeSpentStyle = Object.assign({}, baseStyle, { good: timeSpent < timeEstimated })
         let timeUnspentStyle = Object.assign({}, baseStyle, { bad: timeEstimated < timeSpent })
 
