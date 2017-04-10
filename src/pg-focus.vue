@@ -59,6 +59,10 @@
     fill: color(gray,light);
   }
 
+  .done h1 {
+    text-decoration: line-through;
+  }
+
 </style>
 
 <template>
@@ -79,9 +83,9 @@
         <notif-review @gotoreview="onGoToReview" />
       </div>
     </div>
-    <div class="centered pb5">
+    <div :class="taskStyle">
       <h1>{{ currentTask.name }}</h1>
-      <button class="btn btn-secondary btn-next" @click="onDone">It's done</button>
+      <button class="btn btn-secondary btn-next" v-if="!isDone" @click="onDone">It's done</button>
     </div>
     <div class="arrow-container">
       <div class="arrow" @click.prevent="skipToPrev">
@@ -123,6 +127,18 @@
       rightArrow: require('./svg/arrow-forward.svg'),
       pauseBtn: require('./svg/icon-pause.svg'),
     }),
+    computed: {
+      taskStyle() {
+        return { 
+          centered: true,
+          pb5: true,
+          done: this.isDone 
+        }
+      },
+      isDone() {
+        return !!this.currentTask.done
+      }
+    },
     methods: {
       startBreak() {
         this.setBreak(true)
