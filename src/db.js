@@ -43,9 +43,12 @@ const setData = (key, data, callback) => {
   })
 }
 
+const clear = () => chrome.storage.sync.clear()
+
 export default {
   fetchData,
   subscribeToData,
   unsubscribeToData,
   setData,
+  clear,
 }

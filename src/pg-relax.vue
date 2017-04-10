@@ -35,24 +35,8 @@
     components: {
       'vector': Vector
     },
-    props: [
-      'db',
-      'goToNextTask',
-    ],
     data: () => ({
       icon: require('./svg/mood-4.svg'),
     }),
-    mounted() {
-      this.db.fetchData('relax', ({ key, value }) => {
-        const relax = value
-        if (!relax || new Date() > new Date(relax.until)) {
-          this.db.setData('relax', null, () => {
-            this.goToNextTask() // plan the new day :-)
-          })
-        } else {
-          console.log('relaxing until', new Date(relax.until), '...')
-        }
-      })
-    },
   }
 </script>

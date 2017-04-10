@@ -170,6 +170,7 @@
       'db',
       'tasks',
       'analytics',
+      'startDay',
       'goToNextTask',
       'updateTaskByName',
     ],
@@ -197,6 +198,7 @@
           this.askDurationFor = nonEstimatedTasks[0].name // => pickDuration() will be called
           this.afterDurationFct = this.onStart.bind(this)
         } else {
+          this.startDay()
           this.goToNextTask()
           this.analytics.focus.start(this.tasks.map((task) => ({
             id: task.uuid,

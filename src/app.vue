@@ -33,6 +33,7 @@
       :setBreak="setBreak"
       :updateTaskByName="updateTaskByName"
       :goToNextTask="goToNextTask"
+      :startDay="startDay"
     ></router-view>
   </div>
 </template>
@@ -41,6 +42,7 @@
   import dbChrome from './db.js'
   import dbFake from './db-fake.js'
   import Analytics from './analytics'
+  import common from './common.js'
 
   const HOUR_END_OF_DAY = 21 // hour of the day when review screen is to be shown systematically
   // also look for constants: HOUR_PROPOSE_END_OF_DAY (ui-notif-review.vue), RESET_HOUR (pg-review.vue)
@@ -92,6 +94,11 @@
         } else {
           this.db.fetchData(null, ({ key, value }) => {
             value = value || {}
+            if (new Date() > common.getNextDay(new Date(value.startDate))) {
+              this.db.clear() // resets the state of the app
+              callback(null, '/plan')
+              return
+            }
             // if user is supposed to be focusing on a task => redirect to focus page
             const currentTaskIndex = this.tasks.findIndex((t) => t.name === (value.currentTask || {}).name)
             const allTasksDone = this.tasks.length > 0 && this.tasks.filter((t) => !t.done).length === 0
@@ -174,6 +181,10 @@
         const nextTask = this.tasks.find((task) => !task.done)
         console.log('[app] goToNextTask:', nextTask, this.tasks)
         this.setCurrentTask(nextTask || null) // will lead to another page
+      },
+      startDay(callback) {
+        this.db.setData('startDate', new Date().toISOString(), callback || (() =>
+          console.log('[app] updated startDate')))
       },
     },
   }

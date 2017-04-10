@@ -1,12 +1,9 @@
 // Fake storage (for local testing)
 
-var KEYS = [
-  'tasks',         // todays' tasks (array of task objects)
-  'currentTask',   // current task (task object)
-  'mood',          // today's mood (integer: 0-4)
-  'notifDoneTask', // last done task (task object), for notification
-  'relax',         // set when day is done. contains a `until` prop.
-]
+import common from './common.js'
+
+const KEYS = common.KEYS 
+
 var listeners = []
 
 console.info('[FAKE DB]\n === display state:\n',
@@ -64,9 +61,12 @@ const setData = (key, data, callback) => {
   callback({ key })
 }
 
+const clear = () => KEYS.forEach((k) => console.log(k, localStorage.setItem(k, null)))
+
 export default {
   fetchData,
   subscribeToData,
   unsubscribeToData,
   setData,
+  clear,
 }

@@ -140,20 +140,6 @@
   import PerformanceBar from './ui-performance-bar.vue'
   import Vector from './ui-vector.vue'
 
-  const RESET_HOUR = 5 // a new day starts at 5 am
-
-  const tomorrow = () => {
-    var d = new Date()
-    if (d.getHours() >= RESET_HOUR) {
-      d.setDate(d.getDate() + 1)
-    }
-    d.setHours(RESET_HOUR)
-    d.setMinutes(0)
-    d.setSeconds(0)
-    d.setMilliseconds(0)
-    return d
-  }
-
   export default {
     components: {
       'performance-bar': PerformanceBar,
@@ -179,7 +165,7 @@
       endOfDay() { // when: click on "submit" button
         this.analytics.review.comment(this.reviewText)
         this.db.setData('reasonForReview', null, () => {})
-        this.db.setData('relax', { until: tomorrow().getTime() }, () => {
+        this.db.setData('relax', true, () => {
           this.db.setData('mood', null, () => {
             this.db.setData('tasks', [], () => { // clear all tasks
               this.goToNextTask() // will lead to the /relax page
