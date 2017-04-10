@@ -110,7 +110,7 @@
       'setBreak',
       'setCurrentTask',
       'goToNextTask',
-      'updateTaskByName',
+      'updateTaskById',
     ],
     data: () => ({
       leftArrow: require('./svg/arrow-back.svg'),
@@ -166,7 +166,7 @@
         this.$refs.notifDone.notifyDoneTask(this.currentTask)
         this.analytics.focus.finishTask(this.currentTask.uuid)
         // set current task as done
-        this.updateTaskByName(this.currentTask.name, { done: true }, () => {
+        this.updateTaskById(this.currentTask.uuid, { done: true }, () => {
           this.goToNextTask()
         })
       },
@@ -174,7 +174,7 @@
         console.log('cancelling task:', task)
         this.analytics.focus.undoFinishTask(task.uuid)
         // set previous task as not done
-        this.updateTaskByName(task.name, { done: false }, () => {
+        this.updateTaskById(task.uuid, { done: false }, () => {
           this.goToNextTask()
         })
       },

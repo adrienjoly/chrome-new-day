@@ -31,7 +31,7 @@
       :analytics="analytics"
       :setCurrentTask="setCurrentTask"
       :setBreak="setBreak"
-      :updateTaskByName="updateTaskByName"
+      :updateTaskById="updateTaskById"
       :goToNextTask="goToNextTask"
       :startDay="startDay"
       @pickedMood="pickedMood"
@@ -115,7 +115,7 @@
           // console.log('today')
 
           // if user is supposed to be focusing on a task => redirect to focus page
-          const currentTaskIndex = this.tasks.findIndex((t) => t.name === (value.currentTask || {}).name)
+          const currentTaskIndex = this.tasks.findIndex((t) => t.uuid === (value.currentTask || {}).uuid)
           const allTasksDone = this.tasks.length > 0 && this.tasks.filter((t) => !t.done).length === 0
           if (value.relax) {
             callback(null, '/relax')
@@ -138,9 +138,9 @@
           this.$router.push(route || '/plan')
         )
       },
-      updateTaskByName(taskName, update, callback) {
+      updateTaskById(taskId, update, callback) {
         const updatedTasks = this.tasks.map((task) =>
-          task.name !== taskName ? task : Object.assign({}, task, typeof update === 'function' ? update(task) : update))
+          task.uuid !== taskId ? task : Object.assign({}, task, typeof update === 'function' ? update(task) : update))
         this.db.setData('tasks', updatedTasks, callback || (() =>
           console.log('[app] updated elapsed time of previous task')))
       },
@@ -173,7 +173,7 @@
         let diff = {
           elapsedMillisecs: (task.elapsedMillisecs || 0) + newMillisecs,
         }
-        this.updateTaskByName(task.name, diff)
+        this.updateTaskById(task.uuid, diff)
         return Object.assign({}, task, diff)
       },
       _updateTaskStartTime(task) {
@@ -181,7 +181,7 @@
         if (!task) return null;
         const now = new Date().getTime()
         let diff = { lastStart: now }
-        this.updateTaskByName(task.name, diff)
+        this.updateTaskById(task.uuid, diff)
         return Object.assign({}, task, diff)
       },
       setCurrentTask(task, callback) {

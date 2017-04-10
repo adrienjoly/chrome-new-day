@@ -69,7 +69,7 @@
       'analytics',
       'setBreak',
       'goToNextTask',
-      'updateTaskByName',
+      'updateTaskById',
     ],
     data: () => ({
       playBtn: require('./svg/icon-play.svg')
@@ -88,7 +88,7 @@
         console.log('cancelling task:', task)
         this.analytics.break.undoFinishTask(task.uuid)
         // set previous task as not done
-        this.updateTaskByName(task.name, { done: false }, () => {
+        this.updateTaskById(task.uuid, { done: false }, () => {
           this.goToNextTask()
         })
       },

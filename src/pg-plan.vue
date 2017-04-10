@@ -172,7 +172,7 @@
       'analytics',
       'startDay',
       'goToNextTask',
-      'updateTaskByName',
+      'updateTaskById',
     ],
     components: {
       draggable,
@@ -196,15 +196,9 @@
       },
       startButtonText() {
         let remaining = this.unestimatedTasks.length
-        if (this.cannotStart) {
-          return "Add a task to continue";
-        }
-        if (remaining === 0) {
-          return "Start my day"
-        }
-        if (remaining === 1) {
-          return "1 task to estimate"
-        }
+        if (this.cannotStart) { return "Add a task to continue"; }
+        if (remaining === 0) { return "Start my day" }
+        if (remaining === 1) { return "1 task to estimate" }
         return remaining + " tasks to estimate"
       }
     },
@@ -240,11 +234,20 @@
       },
       onAddTask(evt) {
         if (this.$refs.input.value.trim() === '') return;
+
+        let taskName = this.$refs.input.value.trim()
+        // exit early if task exists with same name case insensitive
+        let existingTaskIndex = this.tasks.findIndex((task) => task.name.toLowerCase() === taskName.toLowerCase())
+        if (existingTaskIndex >= 0) { return; }
+
         const task = {
           uuid: common.uuid(),
-          name: this.$refs.input.value,
+          name: taskName,
         }
-        this.db.setData('tasks', this.tasks.concat([ task ]), () =>
+        let newTaskList = this.tasks.slice()
+        newTaskList.push(task)
+
+        this.db.setData('tasks', newTaskList, () =>
           console.log('[plan] added:', task))
         this.$refs.input.value = ''
         this.$refs.input.focus()
@@ -263,7 +266,7 @@
       pickDuration(minutes) {
         const taskName = this.askDurationFor
         const task = this.tasks.find((task) => task.name === taskName)
-        this.updateTaskByName(taskName, { minutes: parseInt(minutes) }, this.afterDurationFct)
+        this.updateTaskById(task.uuid, { minutes: parseInt(minutes) }, this.afterDurationFct)
         this.askDurationFor = null
         this.analytics.estimate.estimate(task.uuid, parseInt(minutes) * 60)
       },
