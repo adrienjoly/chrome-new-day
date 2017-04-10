@@ -15,6 +15,7 @@ const KEYS = [
   'notifDoneTask', // last done task (task object), for notification
   'relax',         // set when day is done. contains a `until` prop.
   'startDate',     // last date when the user pressed "start my day" (used for expiration of tasks of the day)
+  'reasonForReview', // set when user is sent to the review (or mood) page
 ]
 
 const getNextDay = (date) => {
