@@ -1,4 +1,5 @@
 <style lang="scss">
+  
   @import "styles/variables.scss";
   @import "styles/basics.scss";
   @import "styles/buttons.scss";
@@ -15,109 +16,65 @@
     margin-top: 0;
     margin-bottom: 50px;
   }
-  .pg-review {
-    .header {
-      padding: 50px 20px;
-      background-color: gray;
-    }
 
-    ol {
-      border: 1px solid lightgray;
-      padding:            space(2);
-      margin:             space(4) 0;
-      text-align:         left;
-      list-style:         none;
-      border-radius: 5px;
-    }
-    li {
-      position: relative;
-      border-bottom:      1px solid color(gray,pale);
-      padding:            space(2) 0;
-      margin-left:        32px;
-      margin-right:        12px;
-    }
-    ol > li:last-child() {
-      border-bottom:      0 none;
-    }
-    .icon {
-      position:               absolute;
-      margin-top:             2px;
-      left:                   -26px;
-      display:                block;
-      width:                  space(3);
-    }
-    .task-name {
-      @extend           .font-regular;
-      overflow:         hidden;
-      white-space:      nowrap;
-      text-overflow:    ellipsis;
-      display:          block;
-      padding-right:    60px;
-      width:            100%;
-      font-size:        12px;
-    }
-    li[data-undone] .task-name {
-      color: gray;
-      font-style: italic;
-    }
-    .task-duration {
-      @extend           .font-small;
-      display:          block;
-      position:         absolute;
-      right:            0;
-      top:              space(1);
-      text-align:       right;
-      width:            50px;
-      padding:          space(1) 0;
-      color:            color(green,medium);
-    }
-    li[data-extra] .task-duration {
-      color: red;
-    }
-    li[data-undone] .task-duration {
-      display: none;
-    }
-    .review-box {
-      position: relative;
-      p {
-        text-align: left;
-        margin-bottom: 12px;
-      }
-      textarea {
-        display: block;
-        resize: none;
-        border: 1px solid lightgray;
-        background-color: #fafafa;
-        padding: space(2);
-        font-size: 15px;
-        height: 160px;
-        width: 100%;
-        border-radius: 5px;
-      }
-      button {
-        position: absolute;
-        right: 8px;
-        bottom: 8px;
-      }
-    }
+  .pg-review .header {
+    z-index:  20;
+    position: relative;
+    padding:  space(5);
+    background-color: lighten(color(gray,pale),4);
+    @extend .clearfix;
+  }
 
-    .statistic-container {
-      display: inline-block;
-      float: right;
-    }
+  .statistic-container {
+    display: block;
+    float: right;
 
     .statistic {
       display: inline-block;
+      padding: 0 space(2);
+      &:first-child { padding-left: 0; }
+      &:last-child { padding-right: 0; }
     }
 
-    .statistic .good {
-      color: green;
-    }
+  }
 
-    .statistic .bad {
-      color: red;
+  .statistic .good {
+    color: color(green,medium);
+  }
+
+  .statistic .bad {
+    color: color(orange,medium);
+  }
+
+  .review-box {
+    position: relative;
+    
+    p {
+      text-align: left;
+      margin-bottom: 12px;
+    }
+    
+    textarea {
+      display: block;
+      resize: none;
+      @extend .font-regular;
+      height: 200px;
+      width: 100%;
+      padding: space(3) space(3) space(6);
+      border: 1px solid color(gray,light);
+      outline: none;
+      &:focus {
+        border-color: color(orange, medium);
+      }
+    }
+    
+    button {
+      position: absolute;
+      right: space(3);
+      bottom: space(3);
     }
   }
+
 </style>
 
 <template>
@@ -131,14 +88,14 @@
         </div>
       </div>
     </div>
-    <div class="centered">
-      <h1>Give us your feedback</h1>
+    <div class="main-wrapper">
+      <h3 class="text-center mb4">Help us to build a good product ✍️</h3>
       <div class="review-box">
         <textarea
           v-model:value="reviewText"
-          placeholder="Type something..."
+          placeholder="What kind of issues did you have during your workday? What conditions enabled your productivity ?"
         />
-        <button class="button" @click="endOfDay">Submit</button>
+        <button class="btn" @click="endOfDay">Send your feedback</button>
       </div>
     </div>
   </div>

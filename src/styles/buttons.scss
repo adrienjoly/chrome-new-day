@@ -10,9 +10,13 @@
   border-radius:          $radius-base;
   background-color:       color(orange,medium);
   transition:             box-shadow 0.2s ease-in-out;
+  &:hover {
+    background-color:       darken(color(orange,medium),3);
+  }
 }
 
-.button:active {
+.button:active,
+.btn:active {
   box-shadow: inset 0px 2px 2px 1px rgba(0,0,0,0.2);
 }
 
