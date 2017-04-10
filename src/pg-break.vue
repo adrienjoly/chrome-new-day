@@ -30,6 +30,9 @@
   <div class="pg-break">
     <div class="header">
       <span class="meta">Today</span>
+      <div class="break btn-icon-work" @click="onDone">
+        <vector :src="playBtn"/>
+      </div>
       <div class="break-notifs">
         <notif-done
           ref="notifDone"
@@ -41,8 +44,7 @@
       </div>
     </div>
     <div class="centered pb5">
-      <h1>(Break)</h1>
-      <button class="btn btn-secondary btn-next" @click="onDone">Back to work!</button>
+      <h1>Break is a good thing ✌️</h1>
     </div>
   </div>
 </template>
@@ -50,11 +52,13 @@
 <script>
   import NotifDone from './ui-notif-done.vue'
   import NotifReview from './ui-notif-review.vue'
+  import Vector from './ui-vector.vue';
 
   export default {
     components: {
       'notif-done': NotifDone,
       'notif-review': NotifReview,
+      'vector': Vector
     },
     props: [
       'currentTask', // db subscription
@@ -64,6 +68,9 @@
       'goToNextTask',
       'updateTaskByName',
     ],
+    data: () => ({
+      playBtn: require('./svg/icon-play.svg')
+    }),
     methods: {
       onDone() {
         this.setBreak(false)

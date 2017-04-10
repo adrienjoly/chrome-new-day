@@ -52,9 +52,10 @@
 
 .button.btn-outline:disabled,
 .btn.btn-outline:disabled {
-  background-color: white;
-  color:               color(gray,light);
-  border-color:        color(gray,light);
+  background-color:     white;
+  color:                color(gray,light);
+  border-color:         color(gray,light);
+  
   &:active {
     box-shadow: none;
   }
@@ -64,5 +65,61 @@
     background-color:    white;
     color:               color(gray,light);
     border-color:        color(gray,light);
+  }
+}
+
+.btn-icon {
+  cursor: pointer;
+  padding: 19px;
+  border: 1px solid color(gray,pale);
+  border-radius: calc(50%);
+  transition: .1s ease transform;
+  &:hover {
+    transform: scale(1.1);
+    background-color: color(gray,pale);
+    border-color: color(gray,pale);
+  }
+  &:active {
+    background-color: darken(color(gray,pale),3);
+    border-color: darken(color(gray,pale),3);
+  }
+}
+
+.btn-icon-accent {
+  cursor: pointer;
+  padding: 19px;
+  border: 1px solid color(gray,pale);
+  border-radius: calc(50%);
+  transition: .1s ease transform;
+  &:hover {
+    transform: scale(1.1);
+    background-color: color(orange,medium);
+    border-color: color(orange,medium);
+    svg path {
+      fill: white;  
+    }
+  }
+  &:active {
+    background-color: darken(color(orange,medium),3);
+    border-color: darken(color(orange,medium),3);
+  }
+}
+
+.btn-icon-work {
+  cursor: pointer;
+  padding: 19px;
+  border: 1px solid color(green,medium);
+  background-color: color(green,medium);
+  border-radius: calc(50%);
+  transition: .1s ease transform;
+  svg polygon {
+    fill: white;  
+    }
+  &:hover {
+    transform: scale(1.1);
+  }
+  &:active {
+    background-color: darken(color(green,medium),3);
+    border-color: darken(color(green,medium),3);
   }
 }

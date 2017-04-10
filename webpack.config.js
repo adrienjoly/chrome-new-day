@@ -12,7 +12,10 @@ module.exports = {
     rules: [
       {
         test: /\.svg$/,
-        loader: 'svg-inline-loader'
+        loader: 'svg-inline-loader',
+        options: {
+          removeSVGTagAttrs: false
+        }
       },
       {
         test: /\.vue$/,

@@ -34,29 +34,16 @@
   }
 
   .arrow {
-    cursor:       pointer;
     margin:       0px space(2);
     display:      inline-block;
-    width:        space(6);
-    height:       space(6);
-  }
-
-  .arrow:hover circle {
-    fill: color(gray,pale);
-  }
-
-  .arrow:active circle {
-    fill: color(gray,light);
   }
 
   .break {
+    position: relative;
+    display: block;
     float: right;
-    border: 1px solid #ddd;
-    border-radius: calc(50%);
-    width: 50px;
-    height: 50px;
-    padding: 20px;
-    fill: color(gray,light);
+    top: -5px;
+    right: -5px;
   }
 
   .done h1 {
@@ -68,7 +55,7 @@
 <template>
   <div class="pg-focus">
     <div class="header">
-      <div class="break" @click="startBreak">
+      <div class="break btn-icon-accent" @click="startBreak">
         <vector :src="pauseBtn"/>
       </div>
       <span class="meta">{{ today }}</span>
@@ -88,10 +75,10 @@
       <button class="btn btn-secondary btn-next" v-if="!isDone" @click="onDone">It's done</button>
     </div>
     <div class="arrow-container">
-      <div class="arrow" @click.prevent="skipToPrev">
+      <div class="arrow btn-icon" @click.prevent="skipToPrev">
         <vector :src="leftArrow"/>
       </div>
-      <div class="arrow" @click.prevent="skipToNext">
+      <div class="arrow btn-icon" @click.prevent="skipToNext">
         <vector :src="rightArrow"/>
       </div>
     </div>
@@ -128,7 +115,7 @@
     data: () => ({
       leftArrow: require('./svg/arrow-back.svg'),
       rightArrow: require('./svg/arrow-forward.svg'),
-      pauseBtn: require('./svg/icon-pause.svg'),
+      pauseBtn: require('./svg/icon-pause.svg')
     }),
     computed: {
       taskStyle() {
