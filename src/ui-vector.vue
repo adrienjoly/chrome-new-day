@@ -1,8 +1,15 @@
-<style>
+<style lang="scss">
   .vector-container {
-    height: 100%;
-    width: 100%;
+    position: relative;
+    top: -1px;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    // background-color: rgba(100,100,100,0.25);
+  }
+  .icon {
     display: inline-block;
+    vertical-align: middle;
   }
 </style>
 
