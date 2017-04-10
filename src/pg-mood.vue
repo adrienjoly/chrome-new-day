@@ -1,11 +1,10 @@
-<style>
-  .pg-mood h1 {
-    font-weight: bold;
-    text-align: center;
-    position: relative;
-    top: 50px;
-  }
-  .pg-mood .button-bar {
+<style lang="scss">
+
+  @import "styles/variables.scss";
+  @import "styles/basics.scss";
+  @import "styles/buttons.scss";
+
+  .button-bar {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -13,34 +12,31 @@
     text-align: center;
   }
 
-  .pg-mood .icon {
-    width: 92px;
-    height: 92px;
-    margin: 10px;
-    display: inline-block;
-  }
-
-  .pg-mood .icon:hover {
+  .icon-mood {
     cursor: pointer;
-  }
-
-  .pg-mood .icon path {
-    fill: #B2B2B2;
-    transition: fill 0.2s ease-in-out;
-  }
-
-  .pg-mood .icon:hover path {
-    fill: #F3A536;
+    display: inline-block;
+    margin: space(4);
+    transition: .1s ease transform;
+    .vector-container {
+      width: 60px;
+      height: 60px;
+    }
+    svg path {  fill: color(gray,medium); }
+    &:hover {
+      transform: scale(1.1);
+      svg.icon-mood-bad path { fill: color(orange,medium); }
+      svg.icon-mood-good path { fill: color(green,medium); }
+    }
   }
 
 </style>
 
 <template>
-  <div class="pg-mood">
-    <h1>How did you feel today ?</h1>
+  <div class="pg-mood main-wrapper">
+    <h1 class="text-center">How did you feel today ?</h1>
     <div class="button-bar">
       <a v-for="(item, index) in icons"
-        class="icon"
+        class="icon-mood"
         @click.prevent="pickMood(index)">
         <vector :src="item"></vector>
       </a>

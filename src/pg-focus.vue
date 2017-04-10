@@ -48,6 +48,7 @@
 
   .done h1 {
     text-decoration: line-through;
+    padding-bottom: 70px;
   }
 
 </style>

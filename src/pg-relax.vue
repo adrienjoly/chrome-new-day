@@ -1,16 +1,18 @@
-<style scoped>
-  h1 {
-    font-weight: bold;
-    text-align: center;
-    position: relative;
-    top: 50px;
-  }
+<style lang="scss">
+
+  @import "styles/variables.scss";
+  @import "styles/basics.scss";
+  @import "styles/buttons.scss";
+
   .button-bar {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
+    svg path {
+      fill: color(gray,medium);
+    }
   }
   .icon {
     width: 92px;
@@ -21,8 +23,8 @@
 </style>
 
 <template>
-  <div class="pg-relax">
-    <h1>Just relax until tomorrow!</h1>
+  <div class="main-wrapper text-center">
+    <h1>Just relax until tomorrow !</h1>
     <div class="button-bar">
       <vector class="icon" :src="icon"></vector>
     </div>

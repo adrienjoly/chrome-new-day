@@ -30,46 +30,55 @@
     float: right;
 
     .statistic {
+      position: relative;
       display: inline-block;
       padding: 0 space(2);
+      text-align: center;
+      margin-top: -10px;
       &:first-child { padding-left: 0; }
       &:last-child { padding-right: 0; }
     }
 
   }
 
-  .statistic .good {
-    color: color(green,medium);
+  .statistic-label {
+    @extend .meta;
   }
 
-  .statistic .bad {
-    color: color(orange,medium);
+  .statistic-value {
+    @extend   .font-medium;
+    &.good {   color: color(green,medium); }
+    &.bad {    color: color(orange,medium); }
   }
+
 
   .review-box {
     position: relative;
-    
-    p {
-      text-align: left;
-      margin-bottom: 12px;
-    }
+    border: 1px solid color(gray,light);
     
     textarea {
       display: block;
       resize: none;
       @extend .font-regular;
+      border: none;
+      line-height: 22px;
       height: 200px;
       width: 100%;
-      padding: space(3) space(3) space(6);
-      border: 1px solid color(gray,light);
+      padding: space(3) space(3) 0;
+      
       outline: none;
       &:focus {
         border-color: color(orange, medium);
       }
     }
+
+    .review-btn-wrapper {
+      padding: space(3);
+      background-color: white;
+      text-align: right;
+    }
     
     button {
-      position: absolute;
       right: space(3);
       bottom: space(3);
     }
@@ -95,8 +104,11 @@
           v-model:value="reviewText"
           placeholder="What kind of issues did you have during your workday? What conditions enabled your productivity ?"
         />
-        <button class="btn" @click="endOfDay">Send your feedback</button>
+        <div class="review-btn-wrapper">
+          <button class="btn" @click="endOfDay">Send your feedback</button>
+        </div>
       </div>
+      <p class="font-small meta text-center mh4">* We will use this feedback to improve our product methodology</p>
     </div>
   </div>
 </template>
