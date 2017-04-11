@@ -31,10 +31,14 @@ const getNextDay = (date) => {
 
 const getEndHour = (date) => {
   var d = date ? new Date(date) : new Date()
+  const start = new Date(d)
   d.setHours(HOUR_END_OF_DAY)
   d.setMinutes(0)
   d.setSeconds(0)
   d.setMilliseconds(0)
+  if (d < start) {
+    d.setDate(d.getDate() + 1)
+  }
   return d
 }
 

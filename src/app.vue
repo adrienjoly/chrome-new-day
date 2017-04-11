@@ -85,13 +85,18 @@
         this.db.fetchData(null, ({ key, value }) => {
           value = value || {}
           const now = new Date()
-          const startDate = new Date(value.startDate)
+          const startDate = new Date(value.startDate || 'invalid date')
+
+          //console.log('startDate', startDate)
+          //console.log('tomorrow', common.getNextDay(startDate))
 
           if (value.startDate && now > common.getNextDay(startDate)) {
             this.db.clear() // resets the state of the app
             callback(null, '/plan')
             return
           }
+
+          // console.log('getEndHour', common.getEndHour(startDate))
 
           if (value.startDate && now > common.getEndHour(startDate)) {
             if (this.currentTask) {
@@ -104,6 +109,8 @@
               return
             }
           }
+
+          // console.log('today')
 
           // if user is supposed to be focusing on a task => redirect to focus page
           const currentTaskIndex = this.tasks.findIndex((t) => t.name === (value.currentTask || {}).name)
