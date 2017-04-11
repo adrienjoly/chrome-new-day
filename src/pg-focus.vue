@@ -68,7 +68,7 @@
         <vector :src="pauseBtn"/>
       </div>
       <span class="meta">Today</span>
-      <page-indicator :pages="tasks" @page-changed="goToTask" />
+      <page-indicator :pages="tasks" :current="taskindex" @page-changed="goToTask" />
       <div class="focus-notifs">
         <notif-done
           ref="notifDone"
