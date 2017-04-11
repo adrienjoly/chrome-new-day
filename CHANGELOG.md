@@ -1,3 +1,5 @@
+== v1.0.1 ui fix: bad style in review
+
 == v1.0.0 release candidate
  * feature: break / pause mode
  * feature: simpler review screen
