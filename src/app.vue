@@ -60,6 +60,7 @@
       currentTask: [],
       currentTask_handler: null,
       analytics: Analytics,
+      _keyHandler: null,
     }),
     created() {
       console.log('[app] created')
@@ -67,10 +68,14 @@
       this.db.subscribeToData('tasks', this.tasks_handler)
       this.currentTask_handler = ({ key, value }) => { this.currentTask = value }
       this.db.subscribeToData('currentTask', this.currentTask_handler)
+      // keyboard shortcut for debugging/diagnostics
+      this._keyHandler = (e) => e.ctrlKey && e.shiftKey && e.key === 'P' && this.$router.push('/diag')
+      document.addEventListener('keydown', this._keyHandler)
     },
     destroyed() {
       this.db.unsubscribeToData('tasks', this.tasks_handler)
       this.db.unsubscribeToData('currentTask', this.currentTask_handler)
+      document.removeEventListener('keydown', this._keyHandler)
     },
     mounted() {
       console.log('[app] mounted')

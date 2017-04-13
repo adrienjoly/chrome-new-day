@@ -1,3 +1,5 @@
+== v1.0.3: Press Ctrl-Shift-P to display diagnostics (debug)
+
 == v1.0.2 meta: updated project description
 
 == v1.0.1 ui fix: bad style in review

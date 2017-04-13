@@ -21,6 +21,7 @@ const router = new VueRouter({
     { path: '/review', name: 'review', component: PgReview },
     { path: '/relax', name: 'relax', component: PgRelax },
     { path: '/admin', name: 'admin', component: PgAdmin },
+    { path: '/diag', name: 'diag', component: PgAdmin },
   ]
 })
 

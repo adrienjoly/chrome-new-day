@@ -1,6 +1,19 @@
+<style scoped>
+  .pg-admin {
+    padding: 10px;
+  }
+  h2 {
+    color: white;
+    background-color: black;
+    margin: 10px 0;
+    padding: 5px;
+  }
+</style>
+
 <template>
   <div class="pg-admin">
-    <h1>New Day - admin</h1>
+    <h1>New Day - diagnostics</h1>
+    <p> ℹ️ In case of bug, please select all the text of this page, and copy-paste it in an email to the "New Day" team. Thanks for your help and understanding! 🙌</p>
 
     <h2>Current Task</h2>
     <p v-if="!currentTask || !currentTask.name">(none)</p>
@@ -18,30 +31,24 @@
         / {{ task.minutes }} mn)
       </li>
     </ol>
+
+    <h2>Raw state</h2>
+    <xmp>{{ raw }}</xmp>
   </div>
 </template>
 
 <script>
   export default {
-    props: [ 'db' ],
+    props: [
+      'db',
+      'tasks',
+      'currentTask',
+    ],
     data: () => ({
-      currentTask: {},
-      tasks: [],
-      tasksSubscriptionHandler: null,
+      raw: null,
     }),
     created() {
-      this.tasksSubscriptionHandler = ({ key, value }) => {
-        console.log('tasks:', value)
-        this.tasks = value || []
-      }
-      this.db.subscribeToData('tasks', this.tasksSubscriptionHandler)
-      this.db.subscribeToData('currentTask', ({ key, value }) => {
-        console.log('currentTask:', value)
-        this.currentTask = value || {}
-      })
-    },
-    destroyed() {
-      this.db.unsubscribeToData('tasks', this.tasksSubscriptionHandler)
+      this.db.fetchData(null, ({key, value}) => this.raw = JSON.stringify(value, null, 2))
     },
   }
 </script>
