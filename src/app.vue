@@ -47,6 +47,31 @@
 
   const db = window.chrome && window.chrome.storage ? dbChrome : dbFake
 
+  function makeTaskElapsedTimeUpd(task) {
+    // to be called when ending focus on task
+    if (!task) return null;
+    console.log('makeTaskElapsedTimeUpd', task)
+    const now = new Date().getTime()
+    const newMillisecs = now - task.lastStart
+    return {
+      elapsedMillisecs: (task.elapsedMillisecs || 0) + newMillisecs,
+      lastStart: null,
+    }
+  }
+  
+  function makeTaskStartTimeUpd(task) {
+    // to be called when starting focus on task
+    if (!task) return null;
+    const now = new Date().getTime()
+    return { lastStart: now }
+  }
+
+  function applyTaskUpdate(tasks, taskId, update) {
+    console.log('[app] applyTaskUpdate:', (tasks.find((t) => t.uuid === taskId) || {}).name, '<-', update)
+    return tasks.map((task) =>
+      task.uuid !== taskId ? task : Object.assign({}, task, typeof update === 'function' ? update(task) : update))
+  }
+
   try {
     console.log('running "new day" chrome extension, version:', chrome.runtime.getManifest().version)
   } catch(e) {}
@@ -136,59 +161,59 @@
         )
       },
       updateTaskById(taskId, update, callback) {
-        const updatedTasks = this.tasks.map((task) =>
-          task.uuid !== taskId ? task : Object.assign({}, task, typeof update === 'function' ? update(task) : update))
+        const updatedTasks = applyTaskUpdate(this.tasks, taskId, update)
         this.db.setData('tasks', updatedTasks, callback || (() =>
-          console.log('[app] updated elapsed time of previous task')))
+          console.log('[app] updated tasks')))
       },
       setBreak(started, callback) {
         callback = callback || this._route
         console.log('[app] set break:', started)
         if (started === !!this.currentTask.isBreak) {
           callback()
-        } else {
-          let nextTask
-          if (started) {
-            const breakTask = {
-              isBreak: true,
-              pendingTask: null,
-            }
-            breakTask.pendingTask = this._updateTaskElapsedTime(this.currentTask)
-            nextTask = breakTask
-          } else { // this.currentTask is a breakTask
-            nextTask = this._updateTaskStartTime(this.currentTask.pendingTask)
+          return
+        }
+        let nextTask
+        let updatedTasks = this.tasks
+        if (started) {
+          // this.currentTask is not a breakTask
+          const diff = makeTaskElapsedTimeUpd(this.currentTask)
+          nextTask /*const breakTask*/ = {
+            isBreak: true,
+            pendingTask: Object.assign({}, this.currentTask, diff),
           }
+          updatedTasks = applyTaskUpdate(updatedTasks, this.currentTask.uuid, diff)
+        } else {
+          // this.currentTask is a breakTask
+          const diff = makeTaskStartTimeUpd(this.currentTask.pendingTask)
+          nextTask = Object.assign({}, this.currentTask.pendingTask, diff)
+          updatedTasks = applyTaskUpdate(updatedTasks, this.currentTask.pendingTask.uuid, diff)
+        }
+        this.db.setData('tasks', updatedTasks, () => {
+          console.log('[app] setBreak: updated tasks')
           this.db.setData('currentTask', nextTask, callback || (() =>
-            console.log('[app] updated currentTask')))
-        }
-      },
-      _updateTaskElapsedTime(task) {
-        // to be called when ending focus on task
-        if (!task) return null;
-        const now = new Date().getTime()
-        const newMillisecs = now - task.lastStart
-        let diff = {
-          elapsedMillisecs: (task.elapsedMillisecs || 0) + newMillisecs,
-        }
-        this.updateTaskById(task.uuid, diff)
-        return Object.assign({}, task, diff)
-      },
-      _updateTaskStartTime(task) {
-        // to be called when starting focus on task
-        if (!task) return null;
-        const now = new Date().getTime()
-        let diff = { lastStart: now }
-        this.updateTaskById(task.uuid, diff)
-        return Object.assign({}, task, diff)
+            console.log('[app] setBreak: updated currentTask')))
+        })
       },
       setCurrentTask(task, callback) {
         callback = callback || this._route
-        const taskName = (task || {}).name
-        console.log('[app] set current task:', taskName)
-        this._updateTaskElapsedTime(this.currentTask)
-        task = this._updateTaskStartTime(task)
-        this.db.setData('currentTask', task, callback || (() =>
-          console.log('[app] updated currentTask')))
+        console.log('[app] setCurrentTask:', (this.currentTask || {}).name, '->', (task || {}).name)
+        let updatedTasks = this.tasks
+        //this._updateTaskElapsedTime(this.currentTask)
+        if (this.currentTask) {
+          const diff = makeTaskElapsedTimeUpd(this.currentTask)
+          updatedTasks = applyTaskUpdate(updatedTasks, this.currentTask.uuid, diff)
+        }
+        //task = this._updateTaskStartTime(task)
+        if (task) {
+          const diff = makeTaskStartTimeUpd(task)
+          task = Object.assign({}, task, diff)
+          updatedTasks = applyTaskUpdate(updatedTasks, task.uuid, diff)
+        }
+        this.db.setData('tasks', updatedTasks, () => {
+          console.log('[app] setCurrentTask: updated tasks')
+          this.db.setData('currentTask', task, callback || (() =>
+            console.log('[app] setCurrentTask: updated currentTask')))
+        })
       },
       pickedMood() {
         this.setCurrentTask() // => should go to /review
