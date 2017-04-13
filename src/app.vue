@@ -40,7 +40,7 @@
 </template>
 
 <script>
-  import dbChrome from './db.js'
+  import dbChrome from './db.js' // TODO: import db.js OR db-fake.js, depending on environment (prod / dev)
   import dbFake from './db-fake.js'
   import Analytics from './analytics'
   import common from './common.js'
