@@ -56,7 +56,7 @@ const unsubscribeToData = (_key, _handler) => {
 
 // calls back with { key }
 const setData = (key, data, callback) => {
-  localStorage.setItem(key, JSON.stringify(data))
+  localStorage.setItem(key, JSON.stringify(data || null))
   listeners.forEach((listener) => key === listener.key && fetchData(key, listener.handler))
   callback({ key })
 }
