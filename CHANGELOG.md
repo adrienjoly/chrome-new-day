@@ -1,3 +1,5 @@
+== v1.0.4: Bug fix: time-tracking was failing
+
 == v1.0.3: Press Ctrl-Shift-P to display diagnostics (debug)
 
 == v1.0.2 meta: updated project description

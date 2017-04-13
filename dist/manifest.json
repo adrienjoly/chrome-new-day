@@ -3,7 +3,7 @@
   "name": "New Day",
   "short_name": "New Day",
   "description": "A new tab page that helps you focus on your daily tasks, and improve your well-being.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "icons": {
     "128": "icon.png"
   },
