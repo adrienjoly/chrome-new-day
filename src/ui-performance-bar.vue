@@ -57,7 +57,7 @@
       <div class="done" :style="({ width: barPct + '%' })" />
     </div>
     <p class="difference">{{ difference }}</p>
-    <p class="estimated">Estimated: {{ renderSeconds(estimated) }}</p>
+    <p class="estimated">Time estimated: {{ renderSeconds(estimated) }}</p>
   </div>
 </template>
 

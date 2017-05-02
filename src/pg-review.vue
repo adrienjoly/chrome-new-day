@@ -43,6 +43,7 @@
       left:                   -26px;
       display:                block;
       width:                  space(3);
+      top: 10px;
     }
     .task-name {
       @extend           .font-regular;
@@ -98,9 +99,11 @@
         bottom: 8px;
       }
     }
-    .header {
+    header {
       z-index:  20;
-      position: relative;
+      position: fixed;
+      top: 0;
+      left: 0;
       padding:  space(5);
       .meta {
         text-decoration: none;
@@ -114,9 +117,9 @@
 
 <template>
   <div class="pg-review centered">
-    <div class="header">
-      <router-link to="/plan" class="meta">{{ today }}</router-link>
-    </div>
+    <header>
+      <router-link to="/plan" class="meta">Back to planning</router-link>
+    </header>
     <div>
       <h1>{{ today }}</h1>
       <h2>Let's review your workday</h2>
@@ -139,10 +142,11 @@
       </ol>
     </div>
     <div class="review-box">
-      <p>What do you think about that?</p>
+      <p>Did you have any issues during your workday?</p>
+      <p>What conditions enabled your productivity?</p>
       <textarea
         v-model:value="reviewText"
-        placeholder="Type something..."
+        placeholder="✍️ Type something..."
       />
       <button class="button" @click="endOfDay">Submit</button>
     </div>
