@@ -20,6 +20,20 @@
     margin: 10px;
     display: inline-block;
   }
+  .pg-relax footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 50px;
+    .meta {
+      text-decoration: none;
+    }
+    .meta:hover {
+      text-decoration: underline;
+    }
+  }
 </style>
 
 <template>
@@ -28,17 +42,26 @@
     <div class="button-bar">
       <vector class="icon" :src="icon"></vector>
     </div>
+    <footer>
+      <router-link to="/plan" class="meta" @click="reset">...or plan your tasks for tomorrow.</router-link>
+    </footer>
   </div>
 </template>
 
 <script>
   import Vector from './ui-vector.vue';
   export default {
+    props: [
+      'db',
+    ],
     components: {
       'vector': Vector
     },
     data: () => ({
       icon: require('./svg/mood-4.svg'),
     }),
+    reset() {
+      this.db.clear() // resets the state of the app
+    },
   }
 </script>
