@@ -34,6 +34,7 @@
       :updateTaskById="updateTaskById"
       :goToNextTask="goToNextTask"
       :startDay="startDay"
+      :planTomorrow="planTomorrow"
       @pickedMood="pickedMood"
     ></router-view>
   </div>
@@ -226,6 +227,11 @@
       startDay(callback) {
         this.db.setData('startDate', new Date().toISOString(), callback || (() =>
           console.log('[app] updated startDate')))
+      },
+      planTomorrow() {
+        this.db.clear()
+        //this.db.setData('startDate', common.getNextDay().toISOString(), this._route.bind(this))
+        this._route()
       },
     },
   }

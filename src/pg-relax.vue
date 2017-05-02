@@ -43,7 +43,7 @@
       <vector class="icon" :src="icon"></vector>
     </div>
     <footer>
-      <router-link to="/plan" class="meta" @click="reset">...or plan your tasks for tomorrow.</router-link>
+      <span class="meta" @click="planTomorrow">...or plan your tasks for tomorrow.</span>
     </footer>
   </div>
 </template>
@@ -52,7 +52,7 @@
   import Vector from './ui-vector.vue';
   export default {
     props: [
-      'db',
+      'planTomorrow',
     ],
     components: {
       'vector': Vector
@@ -60,8 +60,5 @@
     data: () => ({
       icon: require('./svg/mood-4.svg'),
     }),
-    reset() {
-      this.db.clear() // resets the state of the app
-    },
   }
 </script>
