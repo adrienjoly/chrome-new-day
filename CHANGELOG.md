@@ -1,3 +1,7 @@
+== v1.1: Detailed review and extra navigation
+ * can go back to planning back from anywhere
+ * review screen displays performance on each task
+
 == v1.0.4: Bug fix: time-tracking was failing
 
 == v1.0.3: Press Ctrl-Shift-P to display diagnostics (debug)
