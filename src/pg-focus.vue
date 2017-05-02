@@ -53,13 +53,22 @@
 
 </style>
 
+<style scoped>
+  .meta {
+    text-decoration: none;
+  }
+  .meta:hover {
+    text-decoration: underline;
+  }
+</style>
+
 <template>
   <div class="pg-focus">
     <div class="header">
       <div class="break btn-icon-accent" @click="startBreak">
         <vector :src="pauseBtn"/>
       </div>
-      <span class="meta">{{ today }}</span>
+      <router-link to="/plan" class="meta">{{ today }}</router-link>
       <page-indicator :pages="tasks" :current="taskindex" @page-changed="goToTask" />
       <div class="focus-notifs">
         <notif-done
