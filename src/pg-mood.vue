@@ -29,17 +29,33 @@
     }
   }
 
+  .pg-mood .header {
+    z-index:  20;
+    position: relative;
+    padding:  space(5);
+    .meta {
+      text-decoration: none;
+    }
+    .meta:hover {
+      text-decoration: underline;
+    }
+  }
 </style>
 
 <template>
-  <div class="pg-mood main-wrapper">
-    <h1 class="text-center">How did you feel today ?</h1>
-    <div class="button-bar">
-      <a v-for="(item, index) in icons"
-        class="icon-mood"
-        @click.prevent="pickMood(index)">
-        <vector :src="item"></vector>
-      </a>
+  <div class="pg-mood">
+    <div class="header">
+      <router-link to="/plan" class="meta">Back to planning</router-link>
+    </div>
+    <div class="main-wrapper">
+      <h1 class="text-center">How did you feel today ?</h1>
+      <div class="button-bar">
+        <a v-for="(item, index) in icons"
+          class="icon-mood"
+          @click.prevent="pickMood(index)">
+          <vector :src="item"></vector>
+        </a>
+      </div>
     </div>
   </div>
   

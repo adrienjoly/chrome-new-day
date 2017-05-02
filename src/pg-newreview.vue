@@ -4,6 +4,18 @@
   @import "styles/basics.scss";
   @import "styles/buttons.scss";
 
+  .pg-review .header {
+    z-index:  20;
+    position: relative;
+    padding:  space(5);
+    .meta {
+      text-decoration: none;
+    }
+    .meta:hover {
+      text-decoration: underline;
+    }
+  }
+
   .pg-review h1 {
     font-weight: 300;
     color: #333333;
@@ -89,7 +101,7 @@
 <template>
   <div class="pg-review">
     <div class="header">
-      <span class="meta">{{ today }}</span>
+      <router-link to="/plan" class="meta">{{ today }}</router-link>
       <div class="statistic-container">
         <div v-for="statistic in statistics" class="statistic">
           <div :class="statistic.style">{{ statistic.value }}</div>

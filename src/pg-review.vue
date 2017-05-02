@@ -98,11 +98,25 @@
         bottom: 8px;
       }
     }
+    .header {
+      z-index:  20;
+      position: relative;
+      padding:  space(5);
+      .meta {
+        text-decoration: none;
+      }
+      .meta:hover {
+        text-decoration: underline;
+      }
+    }
   }
 </style>
 
 <template>
   <div class="pg-review centered">
+    <div class="header">
+      <router-link to="/plan" class="meta">{{ today }}</router-link>
+    </div>
     <div>
       <h1>{{ today }}</h1>
       <h2>Let's review your workday</h2>
